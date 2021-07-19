@@ -1,0 +1,23 @@
+.footer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    height: 150px;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    position: relative;
+    z-index: 3;
+    
+}
+
+.footer img{
+    height: 90px;
+    margin: 20px;
+    border: solid white 1px;
+}
+
+.footer h4{
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+}

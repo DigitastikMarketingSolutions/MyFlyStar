@@ -1,0 +1,19 @@
+.searchItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+    width: 80%;
+    margin: 10px;
+}
+
+.searchItem__image{
+    flex: 0.1;
+    width: 50px;
+}
+
+.searchItem__details{
+    display: flex;
+    flex: 0.8;
+    justify-content: space-evenly;
+}

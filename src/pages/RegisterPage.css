@@ -1,0 +1,80 @@
+.register{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-image: linear-gradient(90deg, #86444D, #B24B59);
+    position: relative;
+    margin-top: -7rem;
+    z-index: 0
+}
+
+.register__bgImage{
+    position: absolute;
+    top: 0;
+    z-index: -2;
+
+    max-width: 100vw;
+    height: 100vh;
+}
+
+.register__hero{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 3rem 9rem;
+}
+
+.register__hero__text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 9rem 0rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.register__form{
+    position: relative;
+    z-index: 20;
+    width: 40vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: initial;
+    margin: 7rem 5rem;
+}
+
+.register__form__tabspanel{
+    flex: 0.1;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.register__form__view{
+    width: 100%;
+    height: 45vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0;
+    padding-top: 5px;
+    justify-content: space-between;
+    align-items: initial;
+}
+
+.register__form__view__title{
+    text-align: center;
+}
+
+.register__form__item{
+    width: 98%;
+    margin: 10px;
+}

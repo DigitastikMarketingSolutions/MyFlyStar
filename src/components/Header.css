@@ -1,0 +1,44 @@
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* flex-wrap: wrap; */
+
+    position: relative;
+    z-index: 5;
+    width: 100vw;
+
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.header__logo{
+    display: flex;
+    align-items: center;
+    flex: 0.7;
+}
+
+.header__logo h1{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.header__logo__image{
+    flex: 0.2;
+    
+    max-width: 70px;
+    max-height: 70px;
+    margin: 1rem;
+    margin-left: 3rem;
+
+
+    border-radius: 50%;
+    box-shadow: -5px 5px 20px 0px #000;
+}
+
+.header__settings{
+    flex: 0.1;
+    margin: 2rem 3rem;
+}
+
+.header__admin__logout{
+    margin: 2rem 3rem;
+}
