@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f1a942e4.chunk.css",
+    "main.js": "/static/js/main.faeee7e0.chunk.js",
+    "main.js.map": "/static/js/main.faeee7e0.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.248907bc.js",
+    "runtime-main.js.map": "/static/js/runtime-main.248907bc.js.map",
+    "static/js/2.12eee6cd.chunk.js": "/static/js/2.12eee6cd.chunk.js",
+    "static/js/2.12eee6cd.chunk.js.map": "/static/js/2.12eee6cd.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.f1a942e4.chunk.css.map": "/static/css/main.f1a942e4.chunk.css.map",
+    "static/js/2.12eee6cd.chunk.js.LICENSE.txt": "/static/js/2.12eee6cd.chunk.js.LICENSE.txt",
+    "static/media/Background1.e81eaa04.png": "/static/media/Background1.e81eaa04.png",
+    "static/media/DigiTastik_logo.3f5df729.png": "/static/media/DigiTastik_logo.3f5df729.png",
+    "static/media/Logo.db99d9e0.png": "/static/media/Logo.db99d9e0.png",
+    "static/media/airasia.50872d48.png": "/static/media/airasia.50872d48.png",
+    "static/media/airindia.382ce8f4.png": "/static/media/airindia.382ce8f4.png",
+    "static/media/drukair.ef0b50d5.jpg": "/static/media/drukair.ef0b50d5.jpg",
+    "static/media/goair.4acfcd78.jpg": "/static/media/goair.4acfcd78.jpg",
+    "static/media/spicejet.3de3ab0c.jpg": "/static/media/spicejet.3de3ab0c.jpg",
+    "static/media/vistara.15b735b3.png": "/static/media/vistara.15b735b3.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.248907bc.js",
+    "static/js/2.12eee6cd.chunk.js",
+    "static/css/main.f1a942e4.chunk.css",
+    "static/js/main.faeee7e0.chunk.js"
+  ]
+}
