@@ -1,0 +1,197 @@
+:root{
+    --primary: rgb(235, 97, 143);
+    --secondary:  #ddd;
+    --black: #2f2f2f;
+}
+
+.booked{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 4rem;
+    padding-top: 2rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.booked__markup{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.booked__markup__title{
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+    padding: 15px;
+}
+
+.booked__markup__info{
+    display: inline-block;
+    padding: 20px;
+    font-size: 0.8rem;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--black);
+}
+
+.booked__ticket{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px;
+    border: solid 2px var(--black);
+}
+
+.booked__ticket__header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.booked__ticket__header__company{
+    font-size: 2rem;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.booked__ticket__intro{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.booked__ticket__intro__airlineImage{
+    width: 100px;
+    margin: 5px 10px;
+}
+
+.booked__ticket__intro__pnr{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.booked__ticket__intro__pnr__value{
+    display: inline-block;
+    padding: 10px;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.booked__ticket__flight{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: solid 2px var(--primary);
+    justify-content: flex-start;
+    margin: 10px 0;
+}
+
+.booked__ticket__flight__title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 10px;
+}
+
+.booked__ticket__flight__table td{
+    text-align: center;
+    padding: 5px;
+}
+
+.booked__ticket__flight__row{
+    background-color: var(--secondary);
+}
+
+.booked__ticket__passengers{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: solid 2px var(--primary);
+    justify-content: flex-start;
+}
+
+.booked__ticket__passengers__title{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 10px;
+}
+
+.booked__ticket__passengers__table td{
+    text-align: center;
+    padding: 5px;
+}
+
+.booked__ticket__passengers__row{
+    background-color: var(--secondary);
+}
+
+.booked__ticket__inclusions{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: solid 2px var(--primary);
+    justify-content: flex-start;
+    margin: 10px 0;
+}
+.booked__ticket__inclusions__title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 10px;
+}
+.booked__ticket__inclusions__table td{
+    text-align: center;
+    padding: 5px;
+}
+.booked__ticket__inclusions__row{
+    background-color: var(--secondary);
+    
+}
+
+.booked__ticket__price{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: solid 2px var(--primary);
+    justify-content: flex-start;
+    margin: 10px 0;
+}
+
+.booked__ticket__price__title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 10px;
+}
+
+.booked__ticket__price__row{
+    background-color: var(--secondary);
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+}
+
+.booked__ticket__buttons{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.booked__ticket__print{
+    margin: 10px;
+    width: 300px;
+}

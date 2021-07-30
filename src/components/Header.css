@@ -42,3 +42,28 @@
 .header__admin__logout{
     margin: 2rem 3rem;
 }
+
+.header__brand{
+    display: flex;
+    align-items: center;
+    margin: 0 3rem;
+    padding: 10px;
+}
+
+.header__brand img{
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+.header__brand h4{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.header__links{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #2f2f2f;
+    font-family: 'Open Sans', sans-serif;
+}

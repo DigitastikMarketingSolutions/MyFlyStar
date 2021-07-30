@@ -3,7 +3,6 @@ import { Grid } from "@material-ui/core";
 import Header from "./components/Header";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
-import bgImage from "./Background1.png";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -12,8 +11,13 @@ import ContactPage from "./pages/ContactPage";
 import Footer from "./components/Footer";
 import { useStateValue } from "./data/StateProvider";
 import { auth } from "./Firebase";
-import axios from './axios'
+import axios from "./axios";
 import AdminPage from "./pages/AdminPage";
+import ProfilePage from "./pages/ProfilePage";
+import BookedPage from "./pages/BookedPage";
+import PaymentsPage from "./pages/PaymentsPage";
+import BookingPage from "./pages/BookingPage";
+import OrdersPage from "./pages/OrdersPage";
 
 function App() {
   const [state, dispatch] = useStateValue();
@@ -23,26 +27,29 @@ function App() {
     auth.onAuthStateChanged((authUser) => {
       console.log("USER IS : ", authUser);
       if (authUser) {
-        if(authUser.email!=="admin@123.com"){
-            axios({
-              method: "get",
-              url: `/api/users/${authUser.email}`
-            })
-            .then(res => {
-              console.log(res)
-              dispatch({
-                type: "SET_USER",
-                user: {...authUser, displayName: res.data.name.split(' ')[0]}
-              })
-            })
-          } else {
-            console.log(authUser)
-              dispatch({
-                type: "SET_USER",
-                user: {...authUser, displayName: "Admin"}
-              })
-          }
-          setIsHome(true);
+        if (authUser.email !== "admin@123.com") {
+          axios({
+            method: "get",
+            url: `/api/users/${authUser.email}`,
+          }).then((res) => {
+            console.log(res);
+            dispatch({
+              type: "SET_USER",
+              user: {
+                ...authUser,
+                displayName: res.data.name.split(" ")[0],
+                balance: res.data.balance,
+              },
+            });
+          });
+        } else {
+          console.log(authUser);
+          dispatch({
+            type: "SET_USER",
+            user: { ...authUser, displayName: "Admin" },
+          });
+        }
+        setIsHome(true);
       } else {
         dispatch({
           type: "SET_USER",
@@ -60,8 +67,24 @@ function App() {
           <Route path="/contact">
             <ContactPage />
           </Route>
+          <Route
+            path="/booking"
+            render={(props) => <BookingPage {...props} />}
+          />
+          <Route path="/booked">
+            <BookedPage />
+          </Route>
+          <Route path="/orders">
+            <OrdersPage />
+          </Route>
+          <Route path="/payment">
+            <PaymentsPage />
+          </Route>
           <Route path="/register">
             <RegisterPage />
+          </Route>
+          <Route path="/profile">
+            <ProfilePage />
           </Route>
           <Route exact path="/">
             {!isHome ? (
@@ -73,7 +96,7 @@ function App() {
             )}
           </Route>
         </Switch>
-        <Footer />
+        {!state.user?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43" ? <Footer /> : null}
       </Router>
     </div>
   );

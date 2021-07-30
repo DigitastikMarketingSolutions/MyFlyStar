@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import "./RegisterPage.css";
-import bgImage from "../Background1.png";
+import bgImage from "../images/Background1.png";
 import {
   Paper,
   Button,
@@ -77,7 +77,7 @@ function RegisterPage() {
       <TextField
         className="register__form__item"
         id="filled-basic"
-        label="Company Name"
+        label="Agency Name"
         required={true}
         value={company}
         onChange={handleCompanyChange}

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './Footer.css'
-import logo from '../DigiTastik_logo.png'
+import logo from '../images/DigiTastik_logo.png'
 
 function Footer() {
     return (

@@ -1,95 +1,67 @@
-import {
-  Grid,
-  Typography,
-  Button,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-  Divider,
-} from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import axios from "../axios";
-import { useStateValue } from "../data/StateProvider";
-import { auth } from "../Firebase";
-
-import "./AdminPage.css";
+import React, { useState } from 'react';
+import './AdminPage.css';
+import {Tab, Tabs} from '@material-ui/core';
+import SwipeableViews from 'react-swipeable-views';
+import UserApprovalForm from '../components/UserApprovalForm';
+import UserBalanceAddForm from '../components/UserBalanceAddForm';
+import TicketUploadForm from '../components/TicketUploadForm';
+import PNRUpdateForm from '../components/PNRUpdateForm';
+import SearchUsers from '../components/SearchUsers';
 
 function AdminPage() {
-  const [agents, setAgents] = useState([]);
-  const [agent, setAgent] = useState("");
-  const [ticket, setTicket] = useState({});
-
-  const [state, dispatch] = useStateValue();
-
-  useEffect(() => {
-    axios({
-      method: 'get',
-      url: 'api/users/pending'
-    })
-    .then((res) => {
-        console.log(res.data)
-        setAgents(res.data)
-    });
-  }, []);
-
-  const handleAgentChange = (e) => {
-    setAgent(e.target.value);
-  };
-
-  const handleApproval = () => {
-    const approvedAgent = agents.filter((item) => item._id === agent)[0];
-    console.log(approvedAgent)
-    axios({
-      method: "patch",
-      url: `/api/users/${approvedAgent.email}`
-    }).then((res) => {
-      alert(res.data.message);
-      setAgents(agents.filter(currAgent => currAgent._id!==agent))
-      setAgent('');
-    });
-  };
-
-  return (
-    <div className="admin">
-      <h1 className="admin__title">ADMIN PAGE</h1>
-      <div className="admin__agent__form">
-        <h2 className="admin__subtitle">Registrations</h2>
-        <h4 className="admin__agent__select__helper">(Format : <b><u>Agent Name</u> — <u>Company Name</u> — <u>Phone Number</u> — <u>Email</u></b>)</h4>
-        <div className="admin__agent__select">
-          <FormControl id="reg__form" variant="outlined">
-            <InputLabel id="demo-simple-select-outlined-label">
-              Pending Requests
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={agent}
-              onChange={handleAgentChange}
-              label="Registered Agents"
-              defaultValue={agent}
-            >
-                <MenuItem value={""}>Select...</MenuItem>
-              {agents.map((agent) => (
-                <MenuItem disabled={agent.done} key={agent._id} value={agent._id}>
-                  {agent.name} - {agent.company} - {agent.phone} - {agent.email}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+    const [tab, setTab] = useState(0)
+    const [subtab, setSubtab] = useState(0)
+    return (
+        <div className="admin">
+            <h1 className="admin__title">ADMIN PAGE</h1>
+            <div className="admin__container">
+                <Tabs variant="fullWidth" value={tab} onChange={(e,t) => setTab(t)} aria-label="simple tabs example">
+                  <Tab label="Users" />
+                  <Tab label="Tickets" />
+                  <Tab label="Bookings" />
+                </Tabs>
+                <SwipeableViews axis="x" index={tab} onChangeIndex={i => setTab(i)}>
+                    <div className="admin__container__view">
+                        <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
+                          <Tab label="Approve Users" />
+                          <Tab label="View User" />
+                          <Tab label="Add Balance" />
+                        </Tabs>
+                        <SwipeableViews axis="x" index={subtab} onChangeIndex={i => setSubtab(i)}>
+                            <div className="admin__container__subview">
+                                <UserApprovalForm/>
+                            </div>
+                            <div className="admin__container__subview">
+                                <SearchUsers/>
+                            </div>
+                            <div className="admin__container__subview">
+                                <UserBalanceAddForm/>
+                            </div>
+                        </SwipeableViews>
+                    </div>
+                    <div className="admin__container__view">
+                        <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
+                          <Tab label="Upload Ticket" />
+                          <Tab label="Search Ticket" />
+                          <Tab label="Updating PNR" />
+                        </Tabs>
+                        <SwipeableViews  axis="x" index={subtab} onChangeIndex={i => setSubtab(i)}>
+                            <div className="admin__container__subview">
+                                <TicketUploadForm/>
+                            </div>
+                            <div className="admin__container__subview">Search Ticket</div>
+                            <div className="admin__container__subview">
+                                <PNRUpdateForm/>
+                            </div>
+                        </SwipeableViews>
+                    </div>
+                    <div className="admin__container__view">
+                        Search Bookings
+                    </div>
+                </SwipeableViews>
+            </div>
         </div>
-        <Button
-          disabled={agent == ""}
-          variant="contained"
-          onClick={handleApproval}
-          color="primary"
-        >
-          Approve
-        </Button>
-      </div>
-      <div>{/* <h2 className="admin__subtitle">Registrations</h2> */}</div>
-    </div>
-  );
+    )
 }
 
-export default AdminPage;
+export default AdminPage

@@ -1,0 +1,43 @@
+.admin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: initial;
+    margin-top: -7rem;
+    padding: 7rem;
+}
+
+.admin__title{
+    font-size: 4rem;
+    font-family: 'Open Sans', sans-serif;
+    margin: 2rem;
+}
+
+.admin__agent__form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: initial;
+}
+
+.admin__subtitle{
+    font-size: 3rem;
+    font-family: 'Open Sans', sans-serif;
+    margin: 1rem;
+}
+
+.admin__agent__select__helper{
+    font-size: 1rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.admin__agent__select{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+}
+
+.admin__agent__select > div{
+    width: 90vw;
+}

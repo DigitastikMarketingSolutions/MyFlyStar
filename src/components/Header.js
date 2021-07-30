@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import SettingsIcon from "@material-ui/icons/Settings";
+import {Settings, AddCircleRounded} from "@material-ui/icons";
 import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
-
-import Logo from "../Logo.png";
+import Logo from "../images/Logo.png";
+import logo from "../images/DigiTastik_logo.png"
 import "./Header.css";
 import { auth } from "../Firebase";
 import { useStateValue } from "../data/StateProvider";
@@ -32,33 +32,37 @@ function Header() {
   return (
     <div className="header">
       <div className="header__logo">
-        <img className="header__logo__image" src={Logo} alt="" />
-        <h1>MyFlyStar</h1>
+        <Link className="header__links" to="/">
+          <img className="header__logo__image" src={Logo} alt="" />
+          <h1>MyFlyStar</h1>
+        </Link>
       </div>
       <Typography
         hidden={
-          !state.user || state.user?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43"
+          !auth.currentUser || auth.currentUser?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43"
         }
-        variant="h5"
-        component="h5"
+        variant="h6"
+        component="h6"
       >
         Welcome, {state.user?.displayName}
+        <br/>
+        <span>Current Balance: {state.user?.balance}<Link style={{textDecoration: 'none', color: '#2f2f2f'}} to='/payment'><AddCircleRounded fontSize="small"/></Link></span>
       </Typography>
-      {state.user?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43" ? (
+      {auth.currentUser?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43" ? (
         <div className="header__admin__logout">
           <Button variant="contained" color="secondary" onClick={handleLogout}>
             Logout
           </Button>
         </div>
-      ) : (
+      ) : auth.currentUser ? (
         <div>
           <div
-            hidden={!state.user}
+            hidden={!auth.currentUser}
             aria-controls="settings"
             aria-haspopup="true"
             onClick={handleSettingsClick}
           >
-            <SettingsIcon className="header__settings" fontSize="large" />
+            <Settings className="header__settings" fontSize="large" />
           </div>
 
           <Menu
@@ -75,15 +79,24 @@ function Header() {
             }}
           >
             <MenuItem>
-              <Link to="/profile">Profile</Link>
+              <Link className="header__links" to="/profile">Profile</Link>
             </MenuItem>
-            <MenuItem
-              hidden={state.user?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43"}
-            >
-              <Link to="/orders">My Orders</Link>
+            <MenuItem>
+              <Link className="header__links" to="/orders">My Orders</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link className="header__links" to="/contact">Contact Us</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link className="header__links" to="/payment">Payments</Link>
             </MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
+        </div>
+      ) : (
+        <div className="header__brand">
+            <img src={logo} alt="Digitastik Marketing Solutions Logo"/>
+            <h4>Powered by Digitastik<br/>Marketing Solutions</h4>
         </div>
       )}
     </div>

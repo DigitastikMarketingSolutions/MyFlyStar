@@ -16,4 +16,6 @@
     display: flex;
     flex: 0.8;
     justify-content: space-evenly;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
 }

@@ -3,7 +3,7 @@ import { auth } from '../Firebase'
 import axios from '../axios'
 
 import "./LoginPage.css";
-import bgImage from "../Background1.png";
+import bgImage from "../images/Background1.png";
 import {
   Paper,
   InputLabel,
@@ -31,23 +31,24 @@ function LoginPage() {
       .signInWithEmailAndPassword(email, password)
       .then((authUser) => {
         if(email!=="admin@123.com"){
-          axios({
-            method: "get",
-            url: `/api/users/${email}`
-          })
-          .then(res => {
+          // axios({
+          //   method: "get",
+          //   url: `/api/users/${email}`
+          // })
+          // .then(res => {
             console.log(authUser)
-            dispatch({
-              type: "SET_USER",
-              user: {...authUser, displayName: res.data.name.split(' ')[0]}
-            })
-          })
+            // dispatch({
+            //   type: "SET_USER",
+            //   user: {...authUser, displayName: res.data.name.split(' ')[0], balance: res.data.balance}
+            // })
+          // })
         } else {
+          
           console.log(authUser)
-            dispatch({
-              type: "SET_USER",
-              user: {...authUser, displayName: "Admin"}
-            })
+            // dispatch({
+            //   type: "SET_USER",
+            //   user: {...authUser, displayName: "Admin"}
+            // })
         }
       })
       .catch(err => {
