@@ -1,47 +1,50 @@
 import React, { useState } from "react";
 import "./BookingPage.css";
 import bgImage from "../images/Background1.png";
-import axios from '../axios'
-import { Button, TextField } from "@material-ui/core";
+import axios from "../axios";
+import {
+  Button,
+  Modal,
+  TextField,
+} from "@material-ui/core";
 import { useStateValue } from "../data/StateProvider";
 import { useHistory } from "react-router-dom";
-import {customAlphabet} from 'nanoid';
+import { customAlphabet } from "nanoid";
 import { auth } from "../Firebase";
+import BookingFormListItem from "../components/BookingFormListItem";
 
-function BookingPage(props) {
+function BookingPage() {
+  const ticket = JSON.parse(sessionStorage.getItem("ticket"));
+  console.log(ticket.departure)
   const history = useHistory();
   const [state, dispatch] = useStateValue();
-  const [ adults, child, infants ] = state.ticket.passengers;
+  const [adults, child, infants] = ticket.passengers;
   const [_adults, setAdults] = useState(new Array(adults).fill(""));
   const [_child, setChild] = useState(new Array(child).fill(""));
   const [_infants, setInfants] = useState(new Array(infants).fill(""));
   const [markup, setMarkup] = useState(0);
-  console.log(adults, child, infants);
+  const [modalOpen, setModalOpen] = useState(false)
 
-  const handleAdultsChange = (e, idx) => {
+  const handleAdultsChange = (i) => (text) => {
     setAdults((curr) => {
-      let newAdults = curr.slice();
-      newAdults[idx] = e.target.value;
-      console.log(newAdults);
+      let newAdults = [...curr];
+      newAdults[i] = text;
       return newAdults;
     });
-    console.log(_adults);
   };
 
-  const handleChildChange = (e, idx) => {
+  const handleChildChange = (i) => (text) => {
     setChild((curr) => {
-      let newChild = curr.slice();
-      newChild[idx] = e.target.value;
-      console.log(newChild);
+      let newChild = [...curr];
+      newChild[i] = text;
       return newChild;
     });
   };
 
-  const handleInfantsChange = (e, idx) => {
+  const handleInfantsChange = (i) => (text) => {
     setInfants((curr) => {
-      let newInfants = curr.slice();
-      newInfants[idx] = e.target.value;
-      console.log(newInfants);
+      let newInfants = [...curr];
+      newInfants[i] = text;
       return newInfants;
     });
   };
@@ -60,49 +63,25 @@ function BookingPage(props) {
         {_adults.length ? (
           <h1 className="booking__section__subtitle">Adults</h1>
         ) : null}
-        {new Array(adults).fill(0).map((item, idx) => {
-          return (
-            <div key={idx} className="booking__section__inputs">
-              <span>{idx + 1}.</span>
-              <TextField
-                type="text"
-                variant="filled"
-                value={_adults[idx]}
-                onChange={(e) => handleAdultsChange(e, idx)}
-              />
-            </div>
-          );
-        })}
+        {new Array(adults).fill(0).map((item, i) => (
+          <BookingFormListItem key={customAlphabet('abcdefghijkl',10)+i} idx={i} handleCallback={handleAdultsChange(i)} />
+        ))}
         {_child.length ? (
           <h1 className="booking__section__subtitle">Children</h1>
         ) : null}
-        {new Array(child).fill(0).map((item, idx) => (
-          <div key={idx} className="booking__section__inputs">
-            <span>{idx + 1}.</span>
-            <TextField
-              type="text"
-              variant="filled"
-              value={_child[idx]}
-              onChange={(e) => handleChildChange(e, idx)}
-            />
-          </div>
+        {new Array(child).fill(0).map((item, i) => (
+          <BookingFormListItem key={customAlphabet('abcdefghijkl',10)+i} idx={i} handleCallback={handleChildChange(i)} />
         ))}
         {_infants.length ? (
           <h1 className="booking__section__subtitle">Infants</h1>
         ) : null}
-        {new Array(infants).fill(0).map((item, idx) => {
-          return (
-            <div key={idx} className="booking__section__inputs">
-              <span>{idx + 1}.</span>
-              <TextField
-                type="text"
-                variant="filled"
-                value={_infants[idx]}
-                onChange={(e) => handleInfantsChange(e, idx)}
-              />
-            </div>
-          );
-        })}
+        {new Array(infants).fill(0).map((item, i) => (
+          <BookingFormListItem
+            key={customAlphabet('abcdefghijkl',10)+i}
+            idx={i}
+            handleCallback={handleInfantsChange(i)}
+          />
+        ))}
         <div className="booking__markup booking__section__inputs">
           <h3 className="booking__markup__title">Enter Markup</h3>
           <TextField
@@ -118,71 +97,102 @@ function BookingPage(props) {
             *This amount will be added to the final fare price
           </span>
         </div>
-        <Button
-          disabled={_adults.includes("") || _child.includes("") || _infants.includes("")}
-          className="booking__section__button"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            const price = (parseInt(state.ticket.price) * (adults+child)) + (1500 * infants)
-            const passengers = []
-            if(_adults){
-              passengers.push(..._adults)
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            disabled={
+              _adults.includes("") ||
+              _child.includes("") ||
+              _infants.includes("")
             }
-            if(_child){
-              passengers.push(..._child)
-            }
-            if(_infants){
-              passengers.push(..._infants)
-            }
-            const id1 = customAlphabet('BCDFGHJKLMNPQRSTVWXYZ', 3)()
-            const id2 = customAlphabet('0123456789', 5)()
-            const date = Date.now()
-            dispatch({
-              type: 'SET_TICKET',
-              ticket: {...state.ticket, bookingId: id1+'-'+id2, bookingDate: date}
-            })
-            const data = {
-              email: state.user.email,
-              flightNo: state.ticket.flightNo,
-              pnr: state.ticket.pnr,
-              adults: _adults,
-              children: _child,
-              infants: _infants,
-              price: price + parseInt(markup),
-              bookingId: id1+'-'+id2,
-              bookingDate: date,
-            }
-            axios({
-              method: 'post',
-              url:'api/bookings/',
-              data
-            }).then(_ => {
-              axios({
-                method: 'patch',
-                url:`api/tickets?pnr=${state.ticket.pnr}`,
-                data: {
-                  bookingId: id1+'-'+id2,
-                  bookingDate: date
-                }
-              }).then(res => {
-                axios({
-                  method:'patch',
-                  url: `api/users?type=balanceDeduct&email=${state.user?.email}&amount=${price}`
-                }).then(response => {
-                  dispatch({
-                    type: "SET_USER",
-                    user: {...state.user, balance: state.user.balance-price}
-                  })
-                  history.push("/booked");
-                })
-              })
-              
-            })
-          }}
-        >
-          BOOK
-        </Button>
+            variant="contained"
+            color="primary"
+            className="booking__section__button"
+            onClick={() => setModalOpen(true)}
+          >
+            BOOK
+          </Button>
+          <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+            <div className="booking__modal">
+              <p>Are you sure? No changes can be made further.</p>
+              <div>
+                <Button 
+                  className="booking__modal__button"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    const price =
+                      parseInt(ticket.price) * (adults + child) + 1500 * infants;
+                    const id1 = customAlphabet("BCDFGHJKLMNPQRSTVWXYZ", 3)();
+                    const id2 = customAlphabet("0123456789", 5)();
+                    const date = Date.now();
+                    dispatch({
+                      type: "SET_TICKET",
+                      ticket: {
+                        ...state.ticket,
+                        bookingId: id1 + "-" + id2,
+                        bookingDate: date,
+                      },
+                    });
+                    ticket.adults = _adults;
+                    ticket.children = _child;
+                    ticket.infants = _infants;
+                    ticket.bookingId = id1 + "-" + id2
+                    ticket.bookingDate = date
+                    sessionStorage.setItem("ticket", JSON.stringify(ticket));
+                    const data = {
+                      email: state.user.email,
+                      ticketId: ticket._id,
+                      flightNo: ticket.flightNo,
+                      pnr: ticket.pnr,
+                      journeyDate: ticket.departure,
+                      adults: _adults,
+                      children: _child,
+                      infants: _infants,
+                      price: price + parseInt(markup),
+                      bookingId: id1 + "-" + id2,
+                      bookingDate: date,
+                    };
+                    axios({
+                      method: "post",
+                      url: "api/bookings/",
+                      data,
+                      headers: {'Access-Control-Allow-Origin': '*'}
+                    }).then((_) => {
+                      axios({
+                        method: "patch",
+                        url: `api/tickets?id=${ticket._id}&qty=${adults+child+infants}&bid=${id1 + "-" + id2}&type=booking`
+                      }).then( __ => {
+                        axios({
+                          method: "patch",
+                          url: `api/users?type=balanceDeduct&email=${auth.currentUser?.email}&amount=${price}`,
+                        }).then( ___ => {
+                          dispatch({
+                            type: "SET_USER",
+                            user: {
+                              ...state.user,
+                              balance: state.user.balance - price,
+                            },
+                          });
+                          history.push("/booked");
+                        });
+                      });
+                    });
+                  }}
+                >
+                  Yes, Book Now
+                </Button>
+                <Button
+                  className="booking__modal__button"
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => setModalOpen(false)}
+                >
+                  No, Go Back
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        </div>
       </div>
     </div>
   );

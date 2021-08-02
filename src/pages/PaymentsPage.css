@@ -44,8 +44,10 @@
 
 .payment__section__content{
     display: flex;
+    height: 100%;
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .payment__section__content__qr{
@@ -68,5 +70,20 @@
 .payment__section__content__details{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 20px;
     font-family: 'Open Sans', sans-serif;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.payment__section__content__footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: 'Open Sans', sans-serif;
+    width: 100%;
+    justify-content: space-around;
+    color: #888;
 }

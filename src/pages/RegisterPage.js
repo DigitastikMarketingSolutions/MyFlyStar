@@ -102,7 +102,6 @@ function RegisterPage() {
           value={province}
           onChange={handleProvinceChange}
           label="State"
-          defaultValue={province}
           
         >
           <MenuItem value={"Andhra Pradesh"}>Andhra Pradesh</MenuItem>

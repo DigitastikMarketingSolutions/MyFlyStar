@@ -23,7 +23,7 @@
 }
 
 .booking__section__title{
-    font-size: 2rem;
+    font-size: 3rem;
     color: #2f2f2f;
     font-family: 'Open Sans', sans-serif;
     text-align: center;
@@ -31,14 +31,15 @@
 }
 
 .booking__section__subtitle{
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+    text-decoration: underline;
     color: #2f2f2f;
     font-family: 'Open Sans', sans-serif;
     margin: 10px;
 }
 
 .booking__section{
-    width: 40vw;
+    width: 70vw;
     min-width: 400px;
     display: flex;
     flex-direction: column;
@@ -56,6 +57,10 @@
     align-items: center;
     font-family: 'Open Sans', sans-serif;
     justify-content: flex-start;
+}
+
+.booking__section__input{
+    margin: 0 5px;
 }
 
 .booking__markup{
@@ -76,4 +81,35 @@
     font-size: 0.8rem;
     font-family: 'Open Sans', sans-serif;
     color: #4f4f4f;
+}
+
+.booking__section__button, .booking__modal__button{
+    width: 150px;
+    margin: 10px auto;
+}
+
+.booking__modal{
+    width: 40vw;
+    height: 40vh;
+    position: absolute;
+    top: 30vh;
+    left: 30vw;
+    background-color: aliceblue;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.booking__modal>p{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2rem;
+}
+
+.booking__modal>div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }

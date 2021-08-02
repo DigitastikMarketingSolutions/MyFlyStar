@@ -37,12 +37,9 @@
 }
 
 .pnr__update{
-    flex: 4;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.pnr__input{
-    margin: 0 10px;
+    margin: 0 20px;
 }

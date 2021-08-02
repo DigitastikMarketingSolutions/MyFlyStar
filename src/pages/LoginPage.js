@@ -30,26 +30,26 @@ function LoginPage() {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((authUser) => {
-        if(email!=="admin@123.com"){
+        // if(email!=="admin@123.com"){
           // axios({
           //   method: "get",
           //   url: `/api/users/${email}`
           // })
           // .then(res => {
-            console.log(authUser)
+            // console.log(authUser)
             // dispatch({
             //   type: "SET_USER",
             //   user: {...authUser, displayName: res.data.name.split(' ')[0], balance: res.data.balance}
             // })
           // })
-        } else {
+        // } else {
           
-          console.log(authUser)
+          // console.log(authUser)
             // dispatch({
             //   type: "SET_USER",
             //   user: {...authUser, displayName: "Admin"}
             // })
-        }
+        // }
       })
       .catch(err => {
         console.error(err);

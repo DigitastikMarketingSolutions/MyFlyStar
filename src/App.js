@@ -25,14 +25,14 @@ function App() {
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      console.log("USER IS : ", authUser);
       if (authUser) {
         if (authUser.email !== "admin@123.com") {
           axios({
             method: "get",
-            url: `/api/users/${authUser.email}`,
+            url: `/api/users?email=${authUser.email}`,
+            headers: {'Access-Control-Allow-Origin': '*'}
           }).then((res) => {
-            console.log(res);
+            console.log(res.data)
             dispatch({
               type: "SET_USER",
               user: {
@@ -43,7 +43,6 @@ function App() {
             });
           });
         } else {
-          console.log(authUser);
           dispatch({
             type: "SET_USER",
             user: { ...authUser, displayName: "Admin" },
@@ -96,7 +95,7 @@ function App() {
             )}
           </Route>
         </Switch>
-        {!state.user?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43" ? <Footer /> : null}
+        <Footer/>
       </Router>
     </div>
   );

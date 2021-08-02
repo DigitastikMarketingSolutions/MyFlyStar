@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Settings, AddCircleRounded} from "@material-ui/icons";
 import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import Logo from "../images/Logo.png";
+import { Link, useHistory } from "react-router-dom";
+import Logo from "../images/Logo.jpeg";
 import logo from "../images/DigiTastik_logo.png"
 import "./Header.css";
 import { auth } from "../Firebase";
@@ -11,6 +11,12 @@ import { useStateValue } from "../data/StateProvider";
 function Header() {
   const [state, dispatch] = useStateValue();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [balance, setBalance] = useState(state.user?.balance)
+  const history = useHistory()
+
+  useEffect(() => {
+    setBalance(state.user?.balance)
+  }, [state.user?.balance])
 
   const handleSettingsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,6 +31,9 @@ function Header() {
       .signOut()
       .then(() => {
         handleClose();
+        sessionStorage.removeItem('ticket')
+        sessionStorage.removeItem('user')
+        history.push('/')
       })
       .catch((err) => console.error(err));
   };
@@ -64,7 +73,6 @@ function Header() {
           >
             <Settings className="header__settings" fontSize="large" />
           </div>
-
           <Menu
             id="settings"
             anchorEl={anchorEl}
@@ -78,18 +86,18 @@ function Header() {
               },
             }}
           >
-            <MenuItem>
-              <Link className="header__links" to="/profile">Profile</Link>
-            </MenuItem>
-            <MenuItem>
-              <Link className="header__links" to="/orders">My Orders</Link>
-            </MenuItem>
-            <MenuItem>
-              <Link className="header__links" to="/contact">Contact Us</Link>
-            </MenuItem>
-            <MenuItem>
-              <Link className="header__links" to="/payment">Payments</Link>
-            </MenuItem>
+            <Link className="header__links" to="/profile">
+              <MenuItem>Profile</MenuItem>
+            </Link>
+            <Link className="header__links" to="/orders">
+              <MenuItem>My Orders</MenuItem>
+            </Link>
+            <Link className="header__links" to="/contact">
+              <MenuItem>Contact Us</MenuItem>
+            </Link>
+            <Link className="header__links" to="/payment">
+              <MenuItem>Payments</MenuItem>
+            </Link>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>

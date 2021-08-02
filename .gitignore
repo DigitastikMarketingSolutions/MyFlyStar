@@ -23,3 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 src/images
+
+.firebase
+.github
+.firebaserc
+firebase.json

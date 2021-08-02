@@ -19,3 +19,8 @@
     font-family: 'Open Sans', sans-serif;
     font-size: 1rem;
 }
+
+.searchItem__details>span{
+    flex: 1;
+    text-align: center;
+}

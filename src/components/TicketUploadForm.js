@@ -30,7 +30,8 @@ function TicketUploadForm() {
         departure: {date: new Date(), time: "07:30"},
         arrival: {date: new Date(), time: "07:30"},
         stops: 0,
-        price: ""
+        price: "",
+        noOfTickets: ""
       });
 
     const handleFlightNoChange = (e) => {
@@ -66,6 +67,9 @@ function TicketUploadForm() {
       const handlePriceChange = (e) => {
         setTicket(curr => ({...curr, price: e.target.value}))
       }
+      const handleNoOfTicketsChange = (e) => {
+        setTicket(curr => ({...curr, noOfTickets: e.target.value}))
+      }
     
       const handleTicketSubmit = () => {
           const depDate = ticket.departure.date.getTime()
@@ -75,12 +79,29 @@ function TicketUploadForm() {
           const arrDate = ticket.arrival.date.getTime()
           const arrTime = ticket.arrival.time.split(":").map((item) => parseInt(item))
           const arrival = arrDate + arrTime[0]*3600000 + arrTime[1]*60000 -5*3600000 -30*60000
+
+          const ticketQty = parseInt(ticket.noOfTickets)
     
           axios({
             method: 'post',
             url: 'api/tickets/',
-            data: {...ticket, departure, arrival}
-          }).then(res => alert("Ticket Uploaded")).catch(err => console.error(err))
+            data: {...ticket, departure, arrival, noOfTickets: ticketQty}
+          }).then(res => {
+            console.log(res.data)
+            alert("Ticket Uploaded")
+            setTicket({
+              flightNo: "",
+              airline: "",
+              pnr: "Pending",
+              from: "",
+              to: "",
+              departure: {date: new Date(), time: "07:30"},
+              arrival: {date: new Date(), time: "07:30"},
+              stops: 0,
+              price: "",
+              noOfTickets: ""
+            })
+          }).catch(err => console.error(err))
       }
 
 
@@ -92,7 +113,6 @@ function TicketUploadForm() {
                 <Grid item align="center" xs={4}>
                    <TextField
                     className="register__form__item"
-                    id="filled-basic"
                     label="Flight No."
                     required={true}
                     value={ticket.flightNo}
@@ -103,17 +123,15 @@ function TicketUploadForm() {
                 </Grid>
                 <Grid item align="center" xs={4}>
                   <FormControl className="home__form__item" variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">
+                    <InputLabel id="airline-label">
                       Airline
                     </InputLabel>
                     <Select
-                      labelId="demo-simple-select-outlined-label"
-                      id="demo-simple-select-outlined"
+                      labelId="airline-label"
                       required={true}
                       value={ticket.airline}
                       onChange={handleAirlineChange}
                       label="Airline"
-                      defaultValue={ticket.airline}
                       variant="outlined"
                     >
                       <MenuItem value={""}>
@@ -132,9 +150,7 @@ function TicketUploadForm() {
                 <Grid item align="center" xs={4}>
                    <TextField
                     className="register__form__item"
-                    id="filled-basic"
                     label="PNR"
-                    defaultValue={ticket.pnr}
                     value={ticket.pnr}
                     onChange={handlePNRChange}
                     type="text"
@@ -143,66 +159,70 @@ function TicketUploadForm() {
                 </Grid>
                 <Grid item align="center" xs={4}>
                   <FormControl className="home__form__item" variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">
+                    <InputLabel id="from-label">
                       From
                     </InputLabel>
                     <Select
-                      labelId="demo-simple-select-outlined-label"
-                      id="demo-simple-select-outlined"
+                      labelId="from-label"
                       value={ticket.from}
                       onChange={handleFromChange}
                       label="From"
-                      defaultValue={ticket.from}
                       variant="outlined"
                     >
                       <MenuItem value={""}>
                         <em>Select...</em>
                       </MenuItem>
-                      <MenuItem value={"IXB"}>IXB</MenuItem>
+                      <MenuItem disabled={ticket.to === "IXB"} value={"IXB"}>IXB</MenuItem>
+                      <MenuItem disabled={ticket.to === "CCU"} value={"CCU"}>CCU</MenuItem>
+                      <MenuItem disabled={ticket.to === "GAU"} value={"GAU"}>GAU</MenuItem>
+                      <MenuItem disabled={ticket.to === "DEL"} value={"DEL"}>DEL</MenuItem>
+                      <MenuItem disabled={ticket.to === "AMD"} value={"AMD"}>AMD</MenuItem>
+                      <MenuItem disabled={ticket.to === "BOM"} value={"BOM"}>BOM</MenuItem>
+                      <MenuItem disabled={ticket.to === "HYD"} value={"HYD"}>HYD</MenuItem>
+                      <MenuItem disabled={ticket.to === "BLR"} value={"BLR"}>BLR</MenuItem>
+                      <MenuItem disabled={ticket.to === "MAA"} value={"MAA"}>MAA</MenuItem>
+                      <MenuItem disabled={ticket.to === "DIB"} value={"DIB"}>DIB</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item align="center" xs={4}>
                   <FormControl className="home__form__item" variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">
+                    <InputLabel id="to-label">
                       To
                     </InputLabel>
                     <Select
-                      labelId="demo-simple-select-outlined-label"
-                      id="demo-simple-select-outlined"
+                      labelId="to-label"
                       value={ticket.to}
                       onChange={handleToChange}
                       label="To"
-                      defaultValue={ticket.to}
                       variant="outlined"
                     >
                       <MenuItem value={""}>
                         <em>Select...</em>
                       </MenuItem>
-                      <MenuItem value={"CCU"}>CCU</MenuItem>
-                      <MenuItem value={"GAU"}>GAU</MenuItem>
-                      <MenuItem value={"DEL"}>DEL</MenuItem>
-                      <MenuItem value={"AMD"}>AMD</MenuItem>
-                      <MenuItem value={"BOM"}>BOM</MenuItem>
-                      <MenuItem value={"HYD"}>HYD</MenuItem>
-                      <MenuItem value={"BLR"}>BLR</MenuItem>
-                      <MenuItem value={"MAA"}>MAA</MenuItem>
-                      <MenuItem value={"DIB"}>DIB</MenuItem>
+                      <MenuItem disabled={ticket.from === "IXB"} value={"IXB"}>IXB</MenuItem>
+                      <MenuItem disabled={ticket.from === "CCU"} value={"CCU"}>CCU</MenuItem>
+                      <MenuItem disabled={ticket.from === "GAU"} value={"GAU"}>GAU</MenuItem>
+                      <MenuItem disabled={ticket.from === "DEL"} value={"DEL"}>DEL</MenuItem>
+                      <MenuItem disabled={ticket.from === "AMD"} value={"AMD"}>AMD</MenuItem>
+                      <MenuItem disabled={ticket.from === "BOM"} value={"BOM"}>BOM</MenuItem>
+                      <MenuItem disabled={ticket.from === "HYD"} value={"HYD"}>HYD</MenuItem>
+                      <MenuItem disabled={ticket.from === "BLR"} value={"BLR"}>BLR</MenuItem>
+                      <MenuItem disabled={ticket.from === "MAA"} value={"MAA"}>MAA</MenuItem>
+                      <MenuItem disabled={ticket.from === "DIB"} value={"DIB"}>DIB</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item align="center" xs={4}>
                   <FormControl className="home__form__item" variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">
+                    <InputLabel id="stops-label">
                       Stops
                     </InputLabel>
                     <Select
-                      labelId="demo-simple-select-outlined-label"
-                      id="demo-simple-select-outlined"
+                      labelId="stops-label"
                       value={ticket.stops}
                       onChange={handleStopsChange}
                       label="Stops"
-                      defaultValue={ticket.stops}
                       variant="outlined"
                     >
                       <MenuItem value={0}>Non-Stop</MenuItem>
@@ -211,10 +231,10 @@ function TicketUploadForm() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item align="center" xs={4}>
+                <Grid item align="center" xs={3}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <div>
-                      <InputLabel id="demo-simple-select-outlined-label">
+                      <InputLabel id="departure-label">
                         Departure
                       </InputLabel>
                       <br/>
@@ -223,7 +243,6 @@ function TicketUploadForm() {
                         disableToolbar
                         disablePast
                         variant="inline"
-                        id="date-picker-dialog"
                         label="Date"
                         format="dd/MM/yyyy"
                         value={ticket.departure.date}
@@ -233,10 +252,8 @@ function TicketUploadForm() {
                         }}
                       />
                       <TextField
-                        id="time"
                         label="Time"
                         type="time"
-                        defaultValue={ticket.departure.time}
                         value={ticket.departure.time}
                         onChange={handleDepTimeChange}
                         InputLabelProps={{
@@ -249,10 +266,10 @@ function TicketUploadForm() {
                     </div>
                   </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item align="center" xs={4}>
+                <Grid item align="center" xs={3}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <div>
-                      <InputLabel id="demo-simple-select-outlined-label">
+                      <InputLabel id="arrival-label">
                         Arrival
                       </InputLabel>
                       <br/>
@@ -261,7 +278,6 @@ function TicketUploadForm() {
                         disableToolbar
                         disablePast
                         variant="inline"
-                        id="date-picker-dialog"
                         label="Date"
                         format="dd/MM/yyyy"
                         value={ticket.arrival.date}
@@ -271,10 +287,8 @@ function TicketUploadForm() {
                         }}
                       />
                       <TextField
-                        id="time"
                         label="Time"
                         type="time"
-                        defaultValue={ticket.arrival.time}
                         value={ticket.arrival.time}
                         onChange={handleArrTimeChange}
                         InputLabelProps={{
@@ -287,11 +301,22 @@ function TicketUploadForm() {
                     </div>
                   </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item align="center" xs={4}>
+                <Grid item align="center" xs={3}>
                   <br/>
                   <TextField
                     className="register__form__item"
-                    id="filled-basic"
+                    label="No. of tickets"
+                    required={true}
+                    value={ticket.noOfTickets}
+                    onChange={handleNoOfTicketsChange}
+                    type="number"
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item align="center" xs={3}>
+                  <br/>
+                  <TextField
+                    className="register__form__item"
                     label="Price"
                     required={true}
                     value={ticket.price}

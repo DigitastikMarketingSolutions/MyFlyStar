@@ -7,6 +7,8 @@ import UserBalanceAddForm from '../components/UserBalanceAddForm';
 import TicketUploadForm from '../components/TicketUploadForm';
 import PNRUpdateForm from '../components/PNRUpdateForm';
 import SearchUsers from '../components/SearchUsers';
+import SearchTickets from '../components/SearchTickets';
+import SearchBookings from '../components/SearchBookings';
 
 function AdminPage() {
     const [tab, setTab] = useState(0)
@@ -49,14 +51,16 @@ function AdminPage() {
                             <div className="admin__container__subview">
                                 <TicketUploadForm/>
                             </div>
-                            <div className="admin__container__subview">Search Ticket</div>
+                            <div className="admin__container__subview">
+                                <SearchTickets/>
+                            </div>
                             <div className="admin__container__subview">
                                 <PNRUpdateForm/>
                             </div>
                         </SwipeableViews>
                     </div>
                     <div className="admin__container__view">
-                        Search Bookings
+                        <SearchBookings/>
                     </div>
                 </SwipeableViews>
             </div>

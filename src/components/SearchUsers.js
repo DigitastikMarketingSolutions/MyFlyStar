@@ -11,11 +11,11 @@ function SearchUsers() {
   useEffect(() => {
     axios({
       method: "get",
-      url: "api/users/approved",
+      url: "api/users?type=approved",
+      headers: {"Access-Control-Allow-Origin": "*"}
     })
       .then((res) => {
         setUsers(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.error(err));
   }, [setUsers]);

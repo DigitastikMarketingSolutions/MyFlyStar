@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 import bgImage from "../images/Background1.png";
 import {
@@ -17,6 +17,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import "date-fns";
 import SearchItem from "../components/SearchItem";
 import axios from "../axios";
+import { useStateValue } from "../data/StateProvider";
 
 function HomePage() {
   const [sector, setSector] = useState("None");
@@ -26,6 +27,9 @@ function HomePage() {
   const [infants, setInfants] = useState(0);
   const [searches, setSearches] = useState([]);
   const[error, setError] = useState("");
+  const [state, dispatch] = useStateValue()
+
+  console.log(state.user)
 
   const handleSectorChange = (e) => {
     setSector(e.target.value);
@@ -46,12 +50,8 @@ function HomePage() {
   const handleSearch = () => {
     axios({
       method: "get",
-      url: `api/tickets?from=IXB&to=${sector}&departure=${date.getTime()}&type=available`,
-      // data: {
-      //   from: 'IXB',
-      //   to: sector,
-      //   departure: date.getTime()
-      // }
+      url: `api/tickets?from=${sector.slice(0,3)}&to=${sector.slice(4,7)}&departure=${date.getTime()}&type=available`,
+      headers: {'Access-Control-Allow-Origin': '*'}
     })
       .then((res) => {
         if(res.data.length){
@@ -87,21 +87,29 @@ function HomePage() {
               value={sector}
               onChange={handleSectorChange}
               label="Flights"
-              defaultValue={sector}
               variant="outlined"
             >
               <MenuItem value={"None"}>
                 <em>Select...</em>
               </MenuItem>
-              <MenuItem value={"CCU"}>IXB / CCU</MenuItem>
-              <MenuItem value={"GAU"}>IXB / GAU</MenuItem>
-              <MenuItem value={"DEL"}>IXB / DEL</MenuItem>
-              <MenuItem value={"AMD"}>IXB / AMD</MenuItem>
-              <MenuItem value={"BOM"}>IXB / BOM</MenuItem>
-              <MenuItem value={"HYD"}>IXB / HYD</MenuItem>
-              <MenuItem value={"BLR"}>IXB / BLR</MenuItem>
-              <MenuItem value={"MAA"}>IXB / MAA</MenuItem>
-              <MenuItem value={"DIB"}>IXB / DIB</MenuItem>
+              <MenuItem value={"IXB/CCU"}>IXB / CCU</MenuItem>
+              <MenuItem value={"CCU/IXB"}>CCU / IXB</MenuItem>
+              <MenuItem value={"IXB/GAU"}>IXB / GAU</MenuItem>
+              <MenuItem value={"GAU/IXB"}>GAU / IXB</MenuItem>
+              <MenuItem value={"IXB/DEL"}>IXB / DEL</MenuItem>
+              <MenuItem value={"DEL/IXB"}>DEL / IXB</MenuItem>
+              <MenuItem value={"IXB/AMD"}>IXB / AMD</MenuItem>
+              <MenuItem value={"AMD/IXB"}>AMD / IXB</MenuItem>
+              <MenuItem value={"IXB/BOM"}>IXB / BOM</MenuItem>
+              <MenuItem value={"BOM/IXB"}>BOM / IXB</MenuItem>
+              <MenuItem value={"IXB/HYD"}>IXB / HYD</MenuItem>
+              <MenuItem value={"HYD/IXB"}>HYD / IXB</MenuItem>
+              <MenuItem value={"IXB/BLR"}>IXB / BLR</MenuItem>
+              <MenuItem value={"BLR/IXB"}>BLR / IXB</MenuItem>
+              <MenuItem value={"IXB/MAA"}>IXB / MAA</MenuItem>
+              <MenuItem value={"MAA/IXB"}>MAA / IXB</MenuItem>
+              <MenuItem value={"IXB/DIB"}>IXB / DIB</MenuItem>
+              <MenuItem value={"DIB/IXB"}>DIB / IXB</MenuItem>
             </Select>
           </FormControl>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -132,28 +140,24 @@ function HomePage() {
               value={adults}
               onChange={handleAdultsChange}
               label="Adults"
-              defaultValue={adults}
             >
-              <MenuItem disabled={child + infants + 0 > 6} value={0}>
+              <MenuItem disabled={child + infants + 0 > 5} value={0}>
                 0
               </MenuItem>
-              <MenuItem disabled={child + infants + 1 > 6} value={1}>
+              <MenuItem disabled={child + infants + 1 > 5} value={1}>
                 1
               </MenuItem>
-              <MenuItem disabled={child + infants + 2 > 6} value={2}>
+              <MenuItem disabled={child + infants + 2 > 5} value={2}>
                 2
               </MenuItem>
-              <MenuItem disabled={child + infants + 3 > 6} value={3}>
+              <MenuItem disabled={child + infants + 3 > 5} value={3}>
                 3
               </MenuItem>
-              <MenuItem disabled={child + infants + 4 > 6} value={4}>
+              <MenuItem disabled={child + infants + 4 > 5} value={4}>
                 4
               </MenuItem>
-              <MenuItem disabled={child + infants + 5 > 6} value={5}>
+              <MenuItem disabled={child + infants + 5 > 5} value={5}>
                 5
-              </MenuItem>
-              <MenuItem disabled={child + infants + 6 > 6} value={6}>
-                6
               </MenuItem>
             </Select>
           </FormControl>
@@ -167,28 +171,24 @@ function HomePage() {
               value={child}
               onChange={handleChildChange}
               label="Children"
-              defaultValue={child}
             >
-              <MenuItem disabled={adults + infants + 0 > 6} value={0}>
+              <MenuItem disabled={adults + infants + 0 > 5} value={0}>
                 0
               </MenuItem>
-              <MenuItem disabled={adults + infants + 1 > 6} value={1}>
+              <MenuItem disabled={adults + infants + 1 > 5} value={1}>
                 1
               </MenuItem>
-              <MenuItem disabled={adults + infants + 2 > 6} value={2}>
+              <MenuItem disabled={adults + infants + 2 > 5} value={2}>
                 2
               </MenuItem>
-              <MenuItem disabled={adults + infants + 3 > 6} value={3}>
+              <MenuItem disabled={adults + infants + 3 > 5} value={3}>
                 3
               </MenuItem>
-              <MenuItem disabled={adults + infants + 4 > 6} value={4}>
+              <MenuItem disabled={adults + infants + 4 > 5} value={4}>
                 4
               </MenuItem>
-              <MenuItem disabled={adults + infants + 5 > 6} value={5}>
+              <MenuItem disabled={adults + infants + 5 > 5} value={5}>
                 5
-              </MenuItem>
-              <MenuItem disabled={adults + infants + 6 > 6} value={6}>
-                6
               </MenuItem>
             </Select>
           </FormControl>
@@ -202,28 +202,24 @@ function HomePage() {
               value={infants}
               onChange={handleInfantsChange}
               label="Adults"
-              defaultValue={infants}
             >
-              <MenuItem disabled={child + adults + 0 > 6} value={0}>
+              <MenuItem disabled={child + adults + 0 > 5} value={0}>
                 0
               </MenuItem>
-              <MenuItem disabled={child + adults + 1 > 6} value={1}>
+              <MenuItem disabled={child + adults + 1 > 5} value={1}>
                 1
               </MenuItem>
-              <MenuItem disabled={child + adults + 2 > 6} value={2}>
+              <MenuItem disabled={child + adults + 2 > 5} value={2}>
                 2
               </MenuItem>
-              <MenuItem disabled={child + adults + 3 > 6} value={3}>
+              <MenuItem disabled={child + adults + 3 > 5} value={3}>
                 3
               </MenuItem>
-              <MenuItem disabled={child + adults + 4 > 6} value={4}>
+              <MenuItem disabled={child + adults + 4 > 5} value={4}>
                 4
               </MenuItem>
-              <MenuItem disabled={child + adults + 5 > 6} value={5}>
+              <MenuItem disabled={child + adults + 5 > 5} value={5}>
                 5
-              </MenuItem>
-              <MenuItem disabled={child + adults + 6 > 6} value={6}>
-                6
               </MenuItem>
             </Select>
           </FormControl>
@@ -242,12 +238,13 @@ function HomePage() {
       {
         searches.length ? (
           <Card className="home__search__guide" elevation={17}>
-            <span>FLIGHT NO.</span>
-            <span>SECTOR</span>
-            <span>STOPS</span>
-            <span>TRAVEL DATE</span>
-            <span>DEP. / ARR.</span>
-            <span>PRICE</span>
+            <span>Flight No.</span>
+            <span>Sector</span>
+            <span>Stops</span>
+            <span>Travel<br/>Date</span>
+            <span>Dep. / Arr.</span>
+            <span>Price</span>
+            <span>Tickets<br/>Available</span>
           </Card>
         ) : error ? (
           <Card className="home__search__noflights" elevation={12}>

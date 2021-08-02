@@ -3,13 +3,17 @@ import './OrdersPage.css'
 import bgImage from "../images/Background1.png";
 import axios from '../axios'
 import { auth } from '../Firebase';
+import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 function OrdersPage() {
     const [bookings, setBookings] = useState([])
+    const history = useHistory()
     useEffect(() => {
         axios({
             method: 'get',
-            url: `api/bookings?email=${auth.currentUser?.email}`
+            url: `api/bookings?email=${auth.currentUser?.email}`,
+            headers: {'Access-Control-Allow-Origin': '*'}
         }).then(res => setBookings(res.data))
         .catch(err => console.error(err))
     })
@@ -30,8 +34,9 @@ function OrdersPage() {
                         <th>Booking ID</th>
                         <th>Booking Date</th>
                         <th>Flight No.</th>
-                        <th>PNR</th>
+                        <th><span style={{color: 'transparent'}}>.........</span>PNR<span style={{color: 'transparent'}}>.......</span></th>
                         <th>Amount (in INR)</th>
+                        <th><span style={{color: 'transparent'}}>.............</span></th>
                     </tr>
                 )}
                 {
@@ -45,6 +50,20 @@ function OrdersPage() {
                                 <td>{item.flightNo}</td>
                                 <td>{item.pnr}</td>
                                 <td>Rs. {item.price}</td>
+                                <td>
+                                    <Button variant='outlined' onClick={() => {
+                                        axios({
+                                            method: 'get',
+                                            url: `api/tickets?type=booked&id=${item.ticketId}`,
+                                            headers: {'Access-Control-Allow-Origin': '*'}
+                                        }).then(res => {
+                                            sessionStorage.setItem('ticket', JSON.stringify({...res.data, bookingId: item.bookingId, bookingDate: item.bookingDate}))
+                                            history.push('/booked');
+                                        })
+                                    }}>
+                                        View
+                                    </Button>
+                                </td>
                             </tr>
                         )
                     })

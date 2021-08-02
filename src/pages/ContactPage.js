@@ -25,8 +25,9 @@ function ContactPage() {
                         <h1 className="contact__section__subtitle">
                             Office Address:
                         </h1>
-                        <span>Sahebganj Road</span>
-                        <span>Dinhata, Coochbehar</span>
+                        <span>Opp. Gyanadadevi Girls</span>
+                        <span>High School, Dinhata</span>
+                        <span>Coochbehar. PIN-736135</span>
                     </div>
                     <div className="contact__section__container">
                         <h1 className="contact__section__subtitle">
@@ -39,6 +40,8 @@ function ContactPage() {
                         <span>Pincode: 736169</span>
                     </div>
                 </div>
+                <p className="contact__section__footer">24x7 emergency no.: +91 99336 67969</p>
+                <p className="contact__section__footer">For technical queries: +91 91261 94070</p>
             </div>
         </div>
     )

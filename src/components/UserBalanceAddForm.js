@@ -5,13 +5,13 @@ import axios from '../axios'
 
 function UserBalanceAddForm() {
   const [amount, setAmount] = useState("");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [agent, setAgent] = useState({})
 
   const handleUserSearch = () => {
     axios({
       method: 'get',
-      url: `api/users/${email}`
+      url: `api/users?phone=${phone}`
     }).then(res => {
       setAgent(res.data)
     })
@@ -20,10 +20,11 @@ function UserBalanceAddForm() {
   const handleBalanceAdd = () => {
     axios({
       method: 'patch',
-      url: `api/users?email=${agent.email}&type=balanceAdd&amount=${amount}`
+      url: `api/users?phone=${agent.phone}&type=balanceAdd&amount=${amount}`
     }).then(res => {
       // console.log(res.data)
       setAgent(res.data.user)
+      setAmount("")
     })
   }
 
@@ -36,9 +37,9 @@ function UserBalanceAddForm() {
           variant="filled"
           type="text"
           size="small"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          label="Phone No."
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
         />
         <Button  className="balanceAdd__inputs" variant="contained" color="primary" onClick={handleUserSearch}>Search</Button>
       </div>

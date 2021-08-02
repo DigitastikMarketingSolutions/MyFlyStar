@@ -10,20 +10,18 @@ function UserApprovalForm() {
     useEffect(() => {
         axios({
           method: 'get',
-          url: 'api/users/pending'
+          url: 'api/users?type=pending'
         })
         .then((res) => {
-            console.log(res.data)
             setAgents(res.data)
         });
       }, []);
 
     const handleApproval = () => {
         const approvedAgent = agents.filter((item) => item._id === agent)[0];
-        console.log(approvedAgent)
         axios({
             method: "patch",
-            url: `/api/users?email=${approvedAgent.email}&type=approval`
+            url: `/api/users?phone=${approvedAgent.phone}&type=approval`
         }).then((res) => {
             alert(res.data.message);
             setAgents(agents.filter(currAgent => currAgent._id!==agent))
@@ -46,7 +44,6 @@ function UserApprovalForm() {
                   value={agent}
                   onChange={(e) => setAgent(e.target.value)}
                   label="Registered Agents"
-                  defaultValue={agent}
                 >
                     <MenuItem value={""}>Select...</MenuItem>
                   {agents.map((agent) => (

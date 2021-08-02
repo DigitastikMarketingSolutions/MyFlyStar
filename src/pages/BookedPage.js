@@ -1,12 +1,12 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "../axios";
-import Logo from '../images/Logo.png'
+import Logo from '../images/Logo.jpeg'
 import { useStateValue } from "../data/StateProvider";
-import { auth } from "../Firebase";
 import "./BookedPage.css";
 import { useReactToPrint } from 'react-to-print'
 import { useHistory } from "react-router-dom";
+import { auth } from "../Firebase";
 
 function BookedPage(props) {
   const [state, dispatch] = useStateValue()
@@ -22,9 +22,10 @@ function BookedPage(props) {
     to,
     bookingId,
     bookingDate
-  } = state.ticket;
-  const dep = (new Date(departure)).toISOString()
-  const arr = (new Date(arrival)).toISOString()
+  } = JSON.parse(sessionStorage.getItem('ticket'));
+  console.log(JSON.parse(sessionStorage.getItem('ticket')))
+  const dep = (new Date(departure))
+  const arr = (new Date(arrival))
   const [user, setUser] = useState({});
   const [booking, setBooking] = useState({})
   const ticketRef = useRef();
@@ -35,24 +36,24 @@ function BookedPage(props) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `api/users/${auth.currentUser?.email}`,
+      url: `api/users?email=${auth.currentUser?.email}`,
+      headers: {'Access-Control-Allow-Origin': '*'}
     })
       .then((res) => setUser(res.data))
       .catch((err) => console.error(err));
 
-      axios({
-        method: "get",
-        url: `api/bookings?bid=${bookingId}`,
+    axios({
+      method: "get",
+      url: `api/bookings?bid=${bookingId}`,
+      headers: {'Access-Control-Allow-Origin': '*'}
+    })
+      .then((res) => {
+        setBooking(res.data)
+        setAdults(res.data.adults)
+        setChild(res.data.children)
+        setInfants(res.data.infants)
       })
-        .then((res) => {
-          console.log(res.data)
-          setBooking(res.data)
-          setAdults(res.data.adults)
-          setChild(res.data.children)
-          setInfants(res.data.infants)
-        })
-        .catch((err) => console.error(err));
-
+      .catch((err) => console.error(err));
   }, [setUser, bookingId]);
 
   const date = new Date(bookingDate).toISOString()
@@ -70,7 +71,7 @@ function BookedPage(props) {
           <img className="header__logo__image" src={Logo} alt="" />
           <h1>MyFlyStar</h1>
         </div>
-          <div classname="booked__ticket__header__bookedDetails">
+          <div className="booked__ticket__header__bookedDetails">
             <span className="booked__ticket__header__company">
               {user.company}
             </span>
@@ -116,8 +117,8 @@ function BookedPage(props) {
                 </tr>
                 <tr>
                     <td>{flightNo}</td>
-                    <td>{dep.slice(0,10)}<br/>{dep.slice(11,16)}</td>
-                    <td>{arr.slice(0,10)}<br/>{arr.slice(11,16)}</td>                  
+                    <td>{dep.toLocaleDateString('en-GB').replace('/', '-').replace('/', '-')}<br/>{dep.toLocaleTimeString('en-US', {hour12:false}).slice(0,5)}</td>
+                    <td>{arr.toLocaleDateString('en-GB').replace('/', '-').replace('/', '-')}<br/>{arr.toLocaleTimeString('en-US', {hour12:false}).slice(0,5)}</td>
                 </tr>
             </table>
         </div>

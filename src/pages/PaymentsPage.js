@@ -14,19 +14,23 @@ function PaymentsPage() {
                     Payment Options
                 </h1>
                 <div className="payment__section__content">
-                    <div className="payment__section__content__qr">
+                    {/* <div hidden={true} className="payment__section__content__qr">
                         <img src={qrCode} alt=""/>
                         <span>Scan QR to pay with UPI</span>
-                    </div>
+                    </div> */}
                     <div className="payment__section__content__details">
-                        <h1>UPI Details</h1>
+                        {/* <h1>UPI Details</h1>
                         <span>UPI ID: test123@okicici</span>
-                        <span>Phone No.: +91 90875 65231</span>
+                        <span>Phone No.: +91 90875 65231</span> */}
                         <h1>Bank Details</h1>
-                        <span>Account Name: John Doe</span>
-                        <span>Account No.: 4120191000345</span>
-                        <span>IFSC Code: ICIN0009143</span>
-                        <span>Branch Name: Sukantapally Branch, Siliguri</span>
+                        <span>Account Name: SUBHAJIT SAHA</span>
+                        <span>Account No.: 160905005140</span>
+                        <span>IFSC Code: ICIC0001609</span>
+                        <span>MICR Code: 736229501</span>
+                        <span>Branch Name: DINHATA, WEST BENGAL</span>
+                    </div>
+                    <div className="payment__section__content__footer">
+                        <p>*UPI payment features coming soon...</p>
                     </div>
                 </div>
             </div>
