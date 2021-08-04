@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./HomePage.css";
 import bgImage from "../images/Background1.png";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker,
+  DatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import "date-fns";
@@ -55,7 +55,12 @@ function HomePage() {
     })
       .then((res) => {
         if(res.data.length){
-          setSearches(res.data)
+          const response = res.data.sort((a,b) => {
+            const aDate = Math.abs(a.departure-date.getTime())
+            const bDate = Math.abs(b.departure-date.getTime())
+            return aDate-bDate
+          })
+          setSearches(response)
         } else {
           setError("No Flights Found.")
         }
@@ -114,7 +119,7 @@ function HomePage() {
           </FormControl>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div>
-              <KeyboardDatePicker
+              <DatePicker
                 className="home__form__item"
                 disableToolbar
                 disablePast
@@ -124,9 +129,6 @@ function HomePage() {
                 format="dd/MM/yyyy"
                 value={date}
                 onChange={handleDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
               />
             </div>
           </MuiPickersUtilsProvider>

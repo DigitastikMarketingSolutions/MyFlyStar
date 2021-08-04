@@ -12,32 +12,25 @@ function ContactPage() {
                 <h1 className="contact__section__title">
                     Contact Us
                 </h1>
-                <h1 className="contact__section__name">
-                    Subhajit Saha
-                </h1>
-                <div className="contact__section__container__grand">
-                    <div className="contact__section__container">
-                        <h1 className="contact__section__subtitle">
-                            Contact Details:
-                        </h1>
-                        <span>Phone No.: +91 99336 67969</span>
-                        <span>Email: </span>
+                <div className="contact__section__container">
+                    <div className="contact__section__left">
                         <h1 className="contact__section__subtitle">
                             Office Address:
                         </h1>
                         <span>Opp. Gyanadadevi Girls</span>
                         <span>High School, Dinhata</span>
                         <span>Coochbehar. PIN-736135</span>
+                        <span>Office phone: +91 358 135 6141</span>
+                        
                     </div>
-                    <div className="contact__section__container">
+                    <div className="contact__section__right">
                         <h1 className="contact__section__subtitle">
-                            Personal Address:
+                            Contact Details:
                         </h1>
-                        <span>Bhangni Part-II</span>
-                        <span>P.O.: Nigamnagar</span>
-                        <span>P.S.: Dinhata</span>
-                        <span>District: Coochbehar</span>
-                        <span>Pincode: 736169</span>
+                        <span>Phone No.: +91 99336 67969</span>
+                        <span>Email: <a href="mailto: helpdesk@myflystar.com">helpdesk@myflystar.com</a></span>
+                        <span>10a.m. - 8p.m.</span>
+                        <span>(Sunday Closed)</span>
                     </div>
                 </div>
                 <p className="contact__section__footer">24x7 emergency no.: +91 99336 67969</p>

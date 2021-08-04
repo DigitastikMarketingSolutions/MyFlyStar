@@ -9,11 +9,12 @@ import {
   MenuItem,
   TextField,
   Paper,
+  Modal,
 } from "@material-ui/core";
 import axios from "../axios";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker,
+  DatePicker
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import "date-fns";
@@ -33,6 +34,7 @@ function TicketUploadForm() {
         price: "",
         noOfTickets: ""
       });
+      const [open, setOpen] = useState(false)
 
     const handleFlightNoChange = (e) => {
         setTicket(curr => ({...curr, flightNo: e.target.value}))
@@ -50,7 +52,13 @@ function TicketUploadForm() {
         setTicket(curr => ({...curr, to: e.target.value}))
       }
       const handleDepDateChange = (date) => {
-        setTicket(curr => ({...curr, departure: {...curr.departure, date: new Date(date.toISOString().slice(0,10))}}))
+        try{
+          console.log(date)
+          setTicket(curr => ({...curr, departure: {...curr.departure, date: new Date(date.toISOString().slice(0,10))}}))
+        } catch(err){
+          console.log(err)
+        }
+        
       }
       const handleDepTimeChange = (e) => {
         setTicket(curr => ({...curr, departure: {...curr.departure, time: e.target.value}}))
@@ -101,6 +109,7 @@ function TicketUploadForm() {
               price: "",
               noOfTickets: ""
             })
+            setOpen(false)
           }).catch(err => console.error(err))
       }
 
@@ -238,7 +247,7 @@ function TicketUploadForm() {
                         Departure
                       </InputLabel>
                       <br/>
-                      <KeyboardDatePicker
+                      <DatePicker
                         className="home__form__item"
                         disableToolbar
                         disablePast
@@ -247,9 +256,7 @@ function TicketUploadForm() {
                         format="dd/MM/yyyy"
                         value={ticket.departure.date}
                         onChange={handleDepDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change date",
-                        }}
+                        onError={(err) => console.log(err)}
                       />
                       <TextField
                         label="Time"
@@ -273,7 +280,7 @@ function TicketUploadForm() {
                         Arrival
                       </InputLabel>
                       <br/>
-                      <KeyboardDatePicker
+                      <DatePicker
                         className="home__form__item"
                         disableToolbar
                         disablePast
@@ -282,9 +289,6 @@ function TicketUploadForm() {
                         format="dd/MM/yyyy"
                         value={ticket.arrival.date}
                         onChange={handleArrDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change date",
-                        }}
                       />
                       <TextField
                         label="Time"
@@ -331,11 +335,27 @@ function TicketUploadForm() {
                 style={{margin: '20px'}}
                 disabled={Object.values(ticket).includes("")}
                 variant="contained"
-                onClick={handleTicketSubmit}
+                onClick={() => setOpen(true)}
                 color="primary"
             >
               Upload Ticket
             </Button>
+            <Modal
+              open={open}
+              onClose={() => setOpen(false)}
+            >
+                <div className="searchTickets__modal">
+                    <p>Are you sure you want to upload this ticket?</p>
+                    <div className="searchTickets__modal__buttons">
+                    <Button variant="contained" color="secondary" onClick={() => setOpen(false)} >
+                        No, Go Back
+                    </Button>
+                    <Button variant="contained" color="primary" onClick={handleTicketSubmit} >
+                        Yes, Upload
+                    </Button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }

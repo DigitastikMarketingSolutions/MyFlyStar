@@ -23,11 +23,11 @@ function SearchBookings() {
 
   return (
     <div className="searchBookings">
-      <h2 className="searchBookings__title">All Users</h2>
+      <h2 className="searchBookings__title">All Bookings</h2>
       {console.log(bookings)}
       {bookings?.length
-        ? bookings.map((item) => <SearchBookingsListItem item={item}/>)
-        : "No users yet"}
+        ? bookings.map((item) => <SearchBookingsListItem key={item._id} item={item}/>)
+        : "No Bookings yet"}
       
     </div>
   );

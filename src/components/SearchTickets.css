@@ -79,3 +79,20 @@
     justify-content: space-evenly;
     align-items: center;
 }
+
+.ticketops{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.ticketops__container{
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+    border-top: solid 1px #2f2f2f;
+    width: 100%;
+    max-height: 250px;
+}
