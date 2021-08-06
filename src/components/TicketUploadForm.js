@@ -10,6 +10,8 @@ import {
   TextField,
   Paper,
   Modal,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 import axios from "../axios";
 import {
@@ -78,6 +80,9 @@ function TicketUploadForm() {
       const handleNoOfTicketsChange = (e) => {
         setTicket(curr => ({...curr, noOfTickets: e.target.value}))
       }
+      const handleHotDealChange = (e) => {
+        setTicket(curr => ({...curr, hotDeal: e.target.checked}))
+      }
     
       const handleTicketSubmit = () => {
           const depDate = ticket.departure.date.getTime()
@@ -97,18 +102,6 @@ function TicketUploadForm() {
           }).then(res => {
             console.log(res.data)
             alert("Ticket Uploaded")
-            setTicket({
-              flightNo: "",
-              airline: "",
-              pnr: "Pending",
-              from: "",
-              to: "",
-              departure: {date: new Date(), time: "07:30"},
-              arrival: {date: new Date(), time: "07:30"},
-              stops: 0,
-              price: "",
-              noOfTickets: ""
-            })
             setOpen(false)
           }).catch(err => console.error(err))
       }
@@ -166,7 +159,7 @@ function TicketUploadForm() {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item align="center" xs={4}>
+                <Grid item align="center" xs={3}>
                   <FormControl className="home__form__item" variant="outlined">
                     <InputLabel id="from-label">
                       From
@@ -194,7 +187,7 @@ function TicketUploadForm() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item align="center" xs={4}>
+                <Grid item align="center" xs={3}>
                   <FormControl className="home__form__item" variant="outlined">
                     <InputLabel id="to-label">
                       To
@@ -222,7 +215,7 @@ function TicketUploadForm() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item align="center" xs={4}>
+                <Grid item align="center" xs={3}>
                   <FormControl className="home__form__item" variant="outlined">
                     <InputLabel id="stops-label">
                       Stops
@@ -239,6 +232,17 @@ function TicketUploadForm() {
                       <MenuItem value={2}>Two-Stops</MenuItem>
                     </Select>
                   </FormControl>
+                </Grid>
+                <Grid item align="center" xs={3}>
+                  <TextField
+                    className="register__form__item"
+                    label="No. of tickets"
+                    required={true}
+                    value={ticket.noOfTickets}
+                    onChange={handleNoOfTicketsChange}
+                    type="number"
+                    variant="outlined"
+                  />
                 </Grid>
                 <Grid item align="center" xs={3}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -309,24 +313,25 @@ function TicketUploadForm() {
                   <br/>
                   <TextField
                     className="register__form__item"
-                    label="No. of tickets"
-                    required={true}
-                    value={ticket.noOfTickets}
-                    onChange={handleNoOfTicketsChange}
-                    type="number"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item align="center" xs={3}>
-                  <br/>
-                  <TextField
-                    className="register__form__item"
                     label="Price"
                     required={true}
                     value={ticket.price}
                     onChange={handlePriceChange}
                     type="text"
                     variant="outlined"
+                  />
+                </Grid>
+                <Grid item align="center" xs={3}>
+                  <br/>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={ticket.hotDeal}
+                        onChange={handleHotDealChange}
+                        color="primary"
+                      />
+                    }
+                    label="Hot Deal?"
                   />
                 </Grid>
               </Grid>
@@ -356,6 +361,21 @@ function TicketUploadForm() {
                     </div>
                 </div>
             </Modal>
+            <Button variant="contained" color="secondary" onClick={() => {
+              setTicket({
+                flightNo: "",
+                airline: "",
+                pnr: "Pending",
+                from: "",
+                to: "",
+                departure: {date: new Date(), time: "07:30"},
+                arrival: {date: new Date(), time: "07:30"},
+                stops: 0,
+                price: "",
+                noOfTickets: "",
+                hotDeal: false
+              })
+            }}>Clear Form</Button>
         </div>
     )
 }

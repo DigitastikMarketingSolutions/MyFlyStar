@@ -2,13 +2,18 @@ import React from 'react'
 
 import './Footer.css'
 import logo from '../images/DigiTastik_logo.png'
-import { Redirect } from 'react-router-dom'
+import {auth} from '../Firebase'
+
 
 function Footer() {
-    return (
+    return auth.currentUser ? (
         <div className="footer">
             <a href="http://www.digitastik.com"><img src={logo} alt="Digitastik Marketing Solutions Logo"/></a>
             <h4>Powered by Digitastik<br/>Marketing Solutions</h4>
+        </div>
+    ) : (
+        <div className="footer">
+            <h4>24x7 emergency no.: +91 99336 67969</h4>
         </div>
     )
 }

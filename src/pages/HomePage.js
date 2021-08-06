@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./HomePage.css";
 import bgImage from "../images/Background1.png";
+import fireSvg from '../images/fire.svg';
 import {
   FormControl,
   Select,
@@ -29,6 +30,8 @@ function HomePage() {
   const[error, setError] = useState("");
   const [state, dispatch] = useStateValue()
 
+  console.log(fireSvg)
+
   console.log(state.user)
 
   const handleSectorChange = (e) => {
@@ -48,6 +51,7 @@ function HomePage() {
   };
 
   const handleSearch = () => {
+    setSearches([])
     axios({
       method: "get",
       url: `api/tickets?from=${sector.slice(0,3)}&to=${sector.slice(4,7)}&departure=${date.getTime()}&type=available`,
@@ -75,6 +79,10 @@ function HomePage() {
         <img src={bgImage} alt="" />
       </div>
       <div className="home__hero">
+        <div className="home__hero__image">
+          <img src={fireSvg} alt=""/>
+          <h1>Look out for<br/>Hot Deals!</h1>
+        </div>
         <div className="home__hero__text">
           <h1>Looking for Flights?</h1>
           <h5>We will help you bag the greatest deals.</h5>

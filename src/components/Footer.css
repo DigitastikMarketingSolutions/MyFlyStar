@@ -2,17 +2,18 @@
     display: flex;
     flex-wrap: wrap;
     width: 100vw;
-    height: 150px;
+    height: 100px;
     justify-content: center;
     align-items: center;
     background-color: black;
     position: relative;
     z-index: 3;
+    padding: 20px;
 }
 
 .footer img{
-    height: 90px;
-    margin: 20px;
+    height: 60px;
+    margin: 0 20px;
     border: solid white 1px;
 }
 

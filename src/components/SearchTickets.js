@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./SearchTickets.css";
 import axios from "../axios";
-import { Button, Modal, TextField } from "@material-ui/core";
+import { Button, Checkbox, FormControlLabel, Modal, TextField } from "@material-ui/core";
 import { useStateValue } from "../data/StateProvider";
 
 function SearchTickets() {
@@ -9,6 +9,7 @@ function SearchTickets() {
     const [tickets, setTickets] = useState([]);
     const [open, setOpen] = useState(false);
     const [ticket, setTicket] = useState({});
+    const [hotDeal, setHotDeal] = useState(!!ticket.hotDeal)
 
     useEffect(() => {
         axios({
@@ -20,7 +21,7 @@ function SearchTickets() {
                 setTickets(res.data);
             })
             .catch((err) => console.error(err));
-    }, [setTickets]);
+    }, [setTickets, ticket.hotDeal]);
 
     return (
         <div className="searchTickets">
@@ -100,6 +101,26 @@ function SearchTickets() {
                                                         ][0]
                                                       : null}
                                               </h1>
+                                              <FormControlLabel
+                                                  control={
+                                                      <Checkbox
+                                                          checked={
+                                                              hotDeal
+                                                          }
+                                                          onChange={(e) => {
+                                                              setHotDeal(curr => !curr)
+                                                              axios({
+                                                                  method: 'patch',
+                                                                  url: `api/tickets?type=updateHotDeal&id=${ticket._id}&hotDeal=${e.target.checked}`
+                                                              }).then(res => {
+                                                                  setTicket(res.data)
+                                                              })
+                                                          }}
+                                                          color="primary"
+                                                      />
+                                                  }
+                                                  label="Hot Deal(?)"
+                                              />
                                           </div>
                                           <div className="searchTickets__modal__body">
                                               <div className="searchTickets__modal__body__left">
@@ -177,7 +198,11 @@ function SearchTickets() {
                                                   </span>
                                               </div>
                                           </div>
-                                          <TicketOperations ticket={ticket} handleModal={setOpen} handleCallback={setTicket}/>
+                                          <TicketOperations
+                                              ticket={ticket}
+                                              handleModal={setOpen}
+                                              handleCallback={setTicket}
+                                          />
                                       </div>
                                   </Modal>
                               </div>
@@ -197,26 +222,30 @@ const TicketOperations = (props) => {
     const handlePriceUpdate = () => {
         axios({
             method: "patch",
-            url: `api/tickets?type=updatePrice&id=${props.ticket._id}&price=${newPrice}`
-        }).then(res => {
-            props.handleCallback(res.data);
-            setNewPrice("")
-        }).catch(err => console.log(err))
+            url: `api/tickets?type=updatePrice&id=${props.ticket._id}&price=${newPrice}`,
+        })
+            .then((res) => {
+                props.handleCallback(res.data);
+                setNewPrice("");
+            })
+            .catch((err) => console.log(err));
     };
 
     const handleTicketDelete = () => {
         axios({
             method: "delete",
-            url: `api/bookings?tid=${props.ticket._id}`
-        }).then(_ => {
-            axios({
-              method: 'delete',
-              url: `api/tickets?id=${props.ticket._id}`
-            }).then(__ => {
-              setOpen(false);
-              props.handleModal(false)
+            url: `api/bookings?tid=${props.ticket._id}`,
+        })
+            .then((_) => {
+                axios({
+                    method: "delete",
+                    url: `api/tickets?id=${props.ticket._id}`,
+                }).then((__) => {
+                    setOpen(false);
+                    props.handleModal(false);
+                });
             })
-        }).catch(err => console.error(err))
+            .catch((err) => console.error(err));
     };
     return (
         <div className="ticketops">

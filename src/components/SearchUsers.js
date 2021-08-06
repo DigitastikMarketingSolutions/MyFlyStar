@@ -50,6 +50,7 @@ function SearchUsers() {
             <span>{user['state']}</span>
             <span>{user.phone}</span>
             <span>{user.email}</span>
+            <span>Balance: Rs. {user.balance}</span>
         </div>
       </Modal>
     </div>

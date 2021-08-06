@@ -132,6 +132,9 @@ const EmailReset = () => {
     const handleResetPassword = () => {
       auth.sendPasswordResetEmail(email).then(_ => {
         console.log("Password reset email sent.")
+        setOpen(false)
+        setEmail("")
+        alert("Password reset email sent.")
       }).catch(err=> {
         if(err.code==="auth/invalid-email"){
           alert("Email is invalid!")

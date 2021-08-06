@@ -3,7 +3,7 @@ import "./BookingFormListItem.css";
 import { Select, MenuItem, TextField, FormControl, InputLabel } from "@material-ui/core";
 
 function BookingFormListItem(props) {
-  const [name, setName] = useState(["", "", "", ""]);
+  const [name, setName] = useState(["Mr.", "", "", ""]);
 
   useEffect(() => {
     props.handleCallback(
@@ -30,6 +30,7 @@ function BookingFormListItem(props) {
           className="bookingListItem__select"
           labelId="title-label"
           value={name[0]}
+          required={true}
           onChange={(e) => handleNameChange(e.target.value, 0)}
         >
           <MenuItem value="Mr.">Mr.</MenuItem>

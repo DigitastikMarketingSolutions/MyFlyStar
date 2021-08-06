@@ -1,4 +1,5 @@
 import { Button, Card } from "@material-ui/core";
+import fire from "../images/fire.svg"
 import React from "react";
 
 import "./SearchItem.css";
@@ -9,7 +10,7 @@ function SearchItem(props) {
   const history = useHistory();
   const [state, dispatch] = useStateValue();
 
-  const { flightNo, airline, from, to, stops, departure, arrival, passengers, price, noOfTickets } = props;
+  const { flightNo, airline, from, to, stops, departure, arrival, passengers, price, noOfTickets, hotDeal } = props;
   const depDate = new Date(departure);
   const arrDate = new Date(arrival);
   console.log(depDate.toDateString(), arrDate)
@@ -56,6 +57,7 @@ function SearchItem(props) {
       >
         Book
       </Button>
+      {!!hotDeal ? <img src={fire} alt=""/> : null}
     </Card>
   );
 }
