@@ -93,7 +93,7 @@ const SearchBookingsListItem = (props) => {
                     <div className="searchBookings__modal__header">
                         <span>Departure: {new Date(ticket?.departure).toLocaleDateString('en-GB')}&nbsp;&nbsp;&nbsp;&nbsp;<u>{new Date(ticket?.departure).toLocaleTimeString('en-US',{hour12: false}).slice(0,5)}</u></span>
                         <span>Arrival: {new Date(ticket?.arrival).toLocaleDateString('en-GB')}&nbsp;&nbsp;&nbsp;&nbsp;<u>{new Date(ticket?.arrival).toLocaleTimeString('en-US',{hour12: false}).slice(0,5)}</u></span>
-                        <span>Total Price(with markup): {booking?.price}</span>
+                        <span>Total Price(without markup): {booking?.realPrice}</span>
                     </div>
                     <div className="searchBookings__modal__header">
                         <h3>Passenger Details</h3>

@@ -6,6 +6,7 @@ import {
   Button,
   Modal,
   TextField,
+  CircularProgress
 } from "@material-ui/core";
 import { useStateValue } from "../data/StateProvider";
 import { useHistory } from "react-router-dom";
@@ -24,6 +25,7 @@ function BookingPage() {
   const [_infants, setInfants] = useState(new Array(infants).fill(""));
   const [markup, setMarkup] = useState(0);
   const [modalOpen, setModalOpen] = useState(false)
+  const [modal2Open, setModal2Open] = useState(false)
 
   const handleAdultsChange = (i) => (text) => {
     setAdults((curr) => {
@@ -93,9 +95,12 @@ function BookingPage() {
             onChange={handleMarkupChange}
             variant="filled"
           />
-          <span className="booking__markup__info">
-            *This amount will be added to the final fare price
-          </span>
+          <h3 className="booking__markup__title">
+            Billing Price:{parseInt(ticket.price) * (adults + child) + 1500 * infants}
+          </h3>
+          <h3 className="booking__markup__title">
+            Display Fare:{parseInt(ticket.price) * (adults + child) + 1500 * infants + (parseInt(markup) ? parseInt(markup) : 0)}
+          </h3>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
@@ -120,6 +125,7 @@ function BookingPage() {
                   variant="contained"
                   color="primary"
                   onClick={() => {
+                    setModal2Open(true)
                     const price =
                       parseInt(ticket.price) * (adults + child) + 1500 * infants;
                     const id1 = customAlphabet("BCDFGHJKLMNPQRSTVWXYZ", 3)();
@@ -184,6 +190,12 @@ function BookingPage() {
                 >
                   Yes, Book Now
                 </Button>
+                <Modal open={modal2Open} onClose={() => setModal2Open(false)}>
+                  <div className="booking__modal">
+                      <CircularProgress/>
+                      <h3>Your payment is being processed ...<br/>Please do not refresh or go back.</h3>
+                  </div>
+                </Modal>
                 <Button
                   className="booking__modal__button"
                   variant="contained"
