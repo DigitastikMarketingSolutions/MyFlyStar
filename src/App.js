@@ -37,8 +37,8 @@ function App() {
               type: "SET_USER",
               user: {
                 ...authUser,
-                displayName: res.data.name.split(" ")[0],
-                balance: res.data.balance,
+                displayName: res.data?.name.split(" ")[0],
+                balance: res.data?.balance,
               },
             });
           });

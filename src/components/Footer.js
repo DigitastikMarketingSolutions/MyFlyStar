@@ -9,7 +9,7 @@ function Footer() {
     return auth.currentUser ? (
         <div className="footer">
             <a href="http://www.digitastik.com"><img src={logo} alt="Digitastik Marketing Solutions Logo"/></a>
-            <h4>Powered by Digitastik<br/>Marketing Solutions</h4>
+            <a href="http://www.digitastik.com"><h4>Powered by Digitastik<br/>Marketing Solutions</h4></a>
         </div>
     ) : (
         <div className="footer">

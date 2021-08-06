@@ -149,6 +149,7 @@ function BookingPage() {
                       children: _child,
                       infants: _infants,
                       price: price + parseInt(markup),
+                      realPrice: price,
                       bookingId: id1 + "-" + id2,
                       bookingDate: date,
                     };
@@ -160,11 +161,13 @@ function BookingPage() {
                     }).then((_) => {
                       axios({
                         method: "patch",
-                        url: `api/tickets?id=${ticket._id}&qty=${adults+child+infants}&bid=${id1 + "-" + id2}&type=booking`
+                        url: `api/tickets?id=${ticket._id}&qty=${adults+child+infants}&bid=${id1 + "-" + id2}&type=booking`,
+                        headers: {'Access-Control-Allow-Origin': '*'}
                       }).then( __ => {
                         axios({
                           method: "patch",
                           url: `api/users?type=balanceDeduct&email=${auth.currentUser?.email}&amount=${price}`,
+                          headers: {'Access-Control-Allow-Origin': '*'}
                         }).then( ___ => {
                           dispatch({
                             type: "SET_USER",
