@@ -217,6 +217,7 @@ export default SearchTickets;
 
 const TicketOperations = (props) => {
     const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     const [newPrice, setNewPrice] = useState("");
 
     const handlePriceUpdate = () => {
@@ -247,6 +248,18 @@ const TicketOperations = (props) => {
             })
             .catch((err) => console.error(err));
     };
+
+    const handleTicketBlock = () => {
+        axios({
+            method: "patch",
+            url: `api/tickets?id=${props.ticket._id}&type=block`,
+        })
+            .then(res => {
+                props.handleCallback(res.data)
+                setOpen2(false);
+            })
+            .catch((err) => console.error(err));
+    };
     return (
         <div className="ticketops">
             <div className="ticketops__container">
@@ -266,12 +279,45 @@ const TicketOperations = (props) => {
                 >
                     UPDATE
                 </Button>
+
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setOpen2(true)}
+                >
+                    BLOCK
+                </Button>
+                <Modal open={open2} onClose={() => setOpen(false)}>
+                    <div className="searchTickets__modal">
+                        <p>
+                            Are you sure you want to block this ticket?&nbsp;
+                            {`This PNR still has ${props.ticket?.noOfTickets} tickets.`}
+                        </p>
+                        <div className="searchTickets__modal__buttons">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setOpen2(false)}
+                            >
+                                No, Go Back
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={handleTicketBlock}
+                            >
+                                Yes, Block
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
+
                 <Button
                     variant="contained"
                     color="secondary"
                     onClick={() => setOpen(true)}
                 >
-                    Delete Ticket
+                    DELETE
                 </Button>
                 <Modal open={open} onClose={() => setOpen(false)}>
                     <div className="searchTickets__modal">
