@@ -11,7 +11,8 @@ function PNRUpdateForm() {
     const loadPending = () => {
         axios({
             method: 'get',
-            url: 'api/tickets?type=pending'
+            url: 'api/tickets?type=pending',
+            headers: { "Access-Control-Allow-Origin": "*" },
         }).then(res => {
             setPending(res.data)
         }).catch(err => console.error(err))
@@ -60,7 +61,8 @@ const PNRUpdateFormElement = (props) => {
         }).then(res => {
             axios({
                 method: 'patch',
-                url: `api/bookings?id=${tid}&pnr=${pnr}`
+                url: `api/bookings?id=${tid}&pnr=${pnr}`,
+                headers: { "Access-Control-Allow-Origin": "*" },
             }).then(_ => {
                 console.log(_.data)
                 props.handleCallback()

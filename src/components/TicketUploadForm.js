@@ -98,7 +98,8 @@ function TicketUploadForm() {
           axios({
             method: 'post',
             url: 'api/tickets/',
-            data: {...ticket, departure, arrival, noOfTickets: ticketQty}
+            data: {...ticket, departure, arrival, noOfTickets: ticketQty},
+            headers: { "Access-Control-Allow-Origin": "*" },
           }).then(res => {
             console.log(res.data)
             alert("Ticket Uploaded")

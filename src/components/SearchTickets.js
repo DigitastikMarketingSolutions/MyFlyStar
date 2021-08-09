@@ -111,7 +111,9 @@ function SearchTickets() {
                                                               setHotDeal(curr => !curr)
                                                               axios({
                                                                   method: 'patch',
-                                                                  url: `api/tickets?type=updateHotDeal&id=${ticket._id}&hotDeal=${e.target.checked}`
+                                                                  url: `api/tickets?type=updateHotDeal&id=${ticket._id}&hotDeal=${e.target.checked}`,
+                                                                  headers: { "Access-Control-Allow-Origin": "*" },
+                                                                  
                                                               }).then(res => {
                                                                   setTicket(res.data)
                                                               })
@@ -224,6 +226,7 @@ const TicketOperations = (props) => {
         axios({
             method: "patch",
             url: `api/tickets?type=updatePrice&id=${props.ticket._id}&price=${newPrice}`,
+            headers: { "Access-Control-Allow-Origin": "*" },
         })
             .then((res) => {
                 props.handleCallback(res.data);
@@ -236,11 +239,13 @@ const TicketOperations = (props) => {
         axios({
             method: "delete",
             url: `api/bookings?tid=${props.ticket._id}`,
+            headers: { "Access-Control-Allow-Origin": "*" },
         })
             .then((_) => {
                 axios({
                     method: "delete",
                     url: `api/tickets?id=${props.ticket._id}`,
+                    headers: { "Access-Control-Allow-Origin": "*" },
                 }).then((__) => {
                     setOpen(false);
                     props.handleModal(false);
@@ -253,6 +258,7 @@ const TicketOperations = (props) => {
         axios({
             method: "patch",
             url: `api/tickets?id=${props.ticket._id}&type=block`,
+            headers: { "Access-Control-Allow-Origin": "*" }
         })
             .then(res => {
                 props.handleCallback(res.data)

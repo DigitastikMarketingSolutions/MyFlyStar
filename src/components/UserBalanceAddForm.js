@@ -11,7 +11,8 @@ function UserBalanceAddForm() {
   const handleUserSearch = () => {
     axios({
       method: 'get',
-      url: `api/users?phone=${phone}`
+      url: `api/users?phone=${phone}`,
+      headers: { "Access-Control-Allow-Origin": "*" },
     }).then(res => {
       setAgent(res.data)
     })
@@ -20,7 +21,8 @@ function UserBalanceAddForm() {
   const handleBalanceAdd = () => {
     axios({
       method: 'patch',
-      url: `api/users?phone=${agent.phone}&type=balanceAdd&amount=${amount}`
+      url: `api/users?phone=${agent.phone}&type=balanceAdd&amount=${amount}`,
+      headers: { "Access-Control-Allow-Origin": "*" },
     }).then(res => {
       // console.log(res.data)
       setAgent(res.data.user)

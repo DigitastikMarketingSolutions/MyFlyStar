@@ -17,7 +17,8 @@ function ProfilePage() {
         if(user){
             axios({
                 method: 'get',
-                url: `api/users?email=${user.email}`
+                url: `api/users?email=${user.email}`,
+                headers: { "Access-Control-Allow-Origin": "*" },
             }).then(res => {
                 setAgent(res.data)
             })

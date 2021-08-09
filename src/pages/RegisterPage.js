@@ -57,6 +57,7 @@ function RegisterPage() {
                 password: pwd,
                 phone,
             },
+            headers: { "Access-Control-Allow-Origin": "*" },
         })
             .then((data) => {
                 console.log(data);

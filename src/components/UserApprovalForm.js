@@ -17,6 +17,7 @@ function UserApprovalForm() {
         axios({
             method: "get",
             url: "api/users?type=pending",
+            headers: { "Access-Control-Allow-Origin": "*" },
         }).then((res) => {
             setAgents(res.data);
         });
@@ -27,6 +28,7 @@ function UserApprovalForm() {
         axios({
             method: "patch",
             url: `/api/users?phone=${approvedAgent.phone}&type=approval`,
+            headers: { "Access-Control-Allow-Origin": "*" },
         }).then((res) => {
             alert(res.data.message);
             setAgents(agents.filter((currAgent) => currAgent._id !== agent));
@@ -38,6 +40,7 @@ function UserApprovalForm() {
         axios({
             method: "delete",
             url: `/api/users?id=${agent}`,
+            headers: { "Access-Control-Allow-Origin": "*" },
         }).then((res) => {
             alert(res.data.message);
             setAgents(agents.filter((currAgent) => currAgent._id !== agent));
