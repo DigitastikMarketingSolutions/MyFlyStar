@@ -4,31 +4,5 @@
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    padding: 20px;
-}
-
-.searchUsers__user{
-    width: 50%;
-    padding: 10px;
-    margin: 10px;
-    border: solid 2px rgb(235, 97, 143);
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.searchUsers__modal{
-    position: absolute;
-    top: 30vh;
-    left: 30vw;
-    min-width: 40vw;
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 30px;
-    border-radius: 20px;
-    background-color: aliceblue;
+    padding: 20px 0;
 }

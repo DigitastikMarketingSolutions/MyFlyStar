@@ -8,10 +8,10 @@ import {
     Button,
 } from "@material-ui/core";
 import axios from "../axios";
+import { DataGrid } from "@material-ui/data-grid";
 
 function UserApprovalForm() {
-    const [agents, setAgents] = useState([]);
-    const [agent, setAgent] = useState([]);
+    const [rows, setRows] = useState([]);
 
     useEffect(() => {
         axios({
@@ -19,89 +19,102 @@ function UserApprovalForm() {
             url: "api/users?type=pending",
             headers: { "Access-Control-Allow-Origin": "*" },
         }).then((res) => {
-            setAgents(res.data);
+            setRows(
+                res.data.map((user) => {
+                    return {
+                        id: user._id,
+                        name: user.name,
+                        company: user.company,
+                        state: user.state,
+                        phone: user.phone,
+                        email: user.email,
+                    };
+                })
+            );
+            console.log("Hi");
         });
-    }, []);
+    }, [setRows]);
 
-    const handleApproval = () => {
-        const approvedAgent = agents.filter((item) => item._id === agent)[0];
+    const handleApproval = (phone) => {
         axios({
             method: "patch",
-            url: `/api/users?phone=${approvedAgent.phone}&type=approval`,
+            url: `/api/users?phone=${phone}&type=approval`,
             headers: { "Access-Control-Allow-Origin": "*" },
         }).then((res) => {
             alert(res.data.message);
-            setAgents(agents.filter((currAgent) => currAgent._id !== agent));
-            setAgent("");
+            setRows(rows.filter(item => item.phone !== phone))
         });
     };
 
-    const handleRejection = () => {
+    const handleRejection = (uid) => {
         axios({
             method: "delete",
-            url: `/api/users?id=${agent}`,
+            url: `/api/users?id=${uid}`,
             headers: { "Access-Control-Allow-Origin": "*" },
         }).then((res) => {
-            alert(res.data.message);
-            setAgents(agents.filter((currAgent) => currAgent._id !== agent));
-            setAgent("");
+            alert("User Rejected");
+            setRows(rows.filter(item => item.id !== uid))
         });
     };
+
+    const columns = [
+        {
+          field: 'name',
+          headerName: 'Name',
+          width: 250
+        },
+        {
+          field: 'company',
+          headerName: 'Agency',
+          width: 250
+        },
+        {
+          field: 'state',
+          headerName: 'State',
+          width: 120
+        },
+        {
+          field: 'phone',
+          headerName: 'Phone',
+          type: 'string',
+          valueFormatter: ({ value }) => `${value.slice(0,3)} ${value.slice(3,6)} ${value.slice(6)}`,
+          width: 150,
+          sortable: false
+        },
+        {
+          field: 'email',
+          headerName: 'Email',
+          width: 200,
+          sortable: false
+        },
+        {
+          field: 'action',
+          headerName: 'Action',
+          renderCell: params => (
+            <div style={{width:"100%", display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
+                <Button variant="contained" color="primary" onClick={() => handleApproval(params.row.phone)}>Approve</Button>
+                <Button variant="contained" color="secondary" onClick={() => handleRejection(params.row.id)}>Reject</Button>
+            </div>
+          ),
+          width: 250,
+          headerAlign: 'center',
+          sortable: false,
+          filterable: false,
+          disableExport: true
+        }
+      ]
 
     return (
         <div className="admin__agent__form">
             <h2 className="admin__subtitle">Registrations</h2>
-            <h4 className="admin__agent__select__helper">
-                (Format :{" "}
-                <b>
-                    <u>Agent Name</u> — <u>Company Name</u> —{" "}
-                    <u>Phone Number</u> — <u>Email</u>
-                </b>
-                )
-            </h4>
-            <div className="admin__agent__select">
-                <FormControl id="reg__form" variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">
-                        Pending Requests
-                    </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={agent}
-                        onChange={(e) => setAgent(e.target.value)}
-                        label="Registered Agents"
-                    >
-                        <MenuItem value={""}>Select...</MenuItem>
-                        {agents.map((agent) => (
-                            <MenuItem
-                                disabled={agent.done}
-                                key={agent._id}
-                                value={agent._id}
-                            >
-                                {agent.name} - {agent.company} - {agent.phone} -{" "}
-                                {agent.email}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </div>
-            <div className="admin__agent__buttons__panel">
-                <Button
-                    disabled={agent == ""}
-                    variant="contained"
-                    onClick={handleApproval}
-                    color="primary"
-                >
-                    Approve
-                </Button>
-                <Button
-                    disabled={agent == ""}
-                    variant="contained"
-                    onClick={handleRejection}
-                    color="secondary"
-                >
-                    Reject
-                </Button>
+            <div style={{ height: 650, width: '100%' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    rowHeight={80}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                />
             </div>
         </div>
     );

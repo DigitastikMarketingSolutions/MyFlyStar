@@ -24,7 +24,7 @@
 
 .payment__section{
     width: 60vw;
-    height: 70vh;
+    min-height: 70vh;
     margin-top: 9rem;
     display: flex;
     flex-direction: column;
@@ -45,7 +45,6 @@
 .payment__section__content{
     display: flex;
     height: 100%;
-    flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
 }
@@ -53,14 +52,15 @@
 .payment__section__content__qr{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    margin: 10px 40px;
+    flex: 1;
+    margin: 0 40px;
     font-family: 'Open Sans', sans-serif;
 }
 
 .payment__section__content__qr img{
-    max-height: 35vh;
+    max-height: 25vh;
     padding: 10px;
     border: solid 2px #2f2f2f;
     border-radius: 5px;
@@ -70,11 +70,16 @@
 .payment__section__content__details{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    align-items: flex-end;
+    /* padding: 20px; */
     font-family: 'Open Sans', sans-serif;
     width: 100%;
+    flex: 1.5;
     justify-content: space-around;
+}
+
+.payment__section__content__details b{
+    font-size: 1.2rem;
 }
 
 .payment__section__content__footer{

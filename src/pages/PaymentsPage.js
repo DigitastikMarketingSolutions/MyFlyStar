@@ -14,24 +14,34 @@ function PaymentsPage() {
                     Payment Options
                 </h1>
                 <div className="payment__section__content">
-                    {/* <div hidden={true} className="payment__section__content__qr">
+                    <div className="payment__section__content__qr">
+                        <h1>UPI Details</h1>
                         <img src={qrCode} alt=""/>
-                        <span>Scan QR to pay with UPI</span>
-                    </div> */}
+                        <div>
+                            <span>Scan QR to pay with UPI</span>
+                            <br/>
+                            <span><b><u>myflystar@icici</u></b></span>
+                            <br/>
+                            <span><b><u>shubhajit123@icici</u></b></span>
+                            <br/>
+                            <span>Phone No.: +91 81160 67327</span>
+                        </div>
+                    </div>
                     <div className="payment__section__content__details">
-                        {/* <h1>UPI Details</h1>
-                        <span>UPI ID: test123@okicici</span>
-                        <span>Phone No.: +91 90875 65231</span> */}
                         <h1>Bank Details</h1>
                         <span>Account Name: SUBHAJIT SAHA</span>
                         <span>Account No.: 160905005140</span>
                         <span>IFSC Code: ICIC0001609</span>
                         <span>MICR Code: 736229501</span>
                         <span>Branch Name: DINHATA, WEST BENGAL</span>
+                        <br/>
+                        <span>Account Name: SUBHAJIT SAHA</span>
+                        <span>Account No.: 36110458142</span>
+                        <span>IFSC Code: SBIN0015949</span>
+                        <span>MICR Code: 736002152</span>
+                        <span>Branch Name: DINHATA TOWN</span>
                     </div>
-                    <div className="payment__section__content__footer">
-                        <p>*UPI payment features coming soon...</p>
-                    </div>
+                    
                 </div>
             </div>
             

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import './AdminPage.css';
 import {Tab, Tabs} from '@material-ui/core';
-import SwipeableViews from 'react-swipeable-views';
 import UserApprovalForm from '../components/UserApprovalForm';
-import UserBalanceAddForm from '../components/UserBalanceAddForm';
 import TicketUploadForm from '../components/TicketUploadForm';
 import PNRUpdateForm from '../components/PNRUpdateForm';
 import SearchUsers from '../components/SearchUsers';
 import SearchTickets from '../components/SearchTickets';
 import SearchBookings from '../components/SearchBookings';
+import TabPanel from '../components/TabPanel';
 
 function AdminPage() {
     const [tab, setTab] = useState(0)
@@ -22,47 +21,37 @@ function AdminPage() {
                   <Tab label="Tickets" />
                   <Tab label="Bookings" />
                 </Tabs>
-                <SwipeableViews axis="x" index={tab} onChangeIndex={i => setTab(i)}>
-                    <div className="admin__container__view">
-                        <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
-                          <Tab label="Approve Users" />
-                          <Tab label="View User" />
-                          <Tab label="Add Balance" />
-                        </Tabs>
-                        <SwipeableViews axis="x" index={subtab} onChangeIndex={i => setSubtab(i)}>
-                            <div className="admin__container__subview">
-                                <UserApprovalForm/>
-                            </div>
-                            <div className="admin__container__subview">
-                                <SearchUsers/>
-                            </div>
-                            <div className="admin__container__subview">
-                                <UserBalanceAddForm/>
-                            </div>
-                        </SwipeableViews>
-                    </div>
-                    <div className="admin__container__view">
-                        <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
-                          <Tab label="Upload Ticket" />
-                          <Tab label="Search Ticket" />
-                          <Tab label="Updating PNR" />
-                        </Tabs>
-                        <SwipeableViews  axis="x" index={subtab} onChangeIndex={i => setSubtab(i)}>
-                            <div className="admin__container__subview">
-                                <TicketUploadForm/>
-                            </div>
-                            <div className="admin__container__subview">
-                                <SearchTickets/>
-                            </div>
-                            <div className="admin__container__subview">
-                                <PNRUpdateForm/>
-                            </div>
-                        </SwipeableViews>
-                    </div>
-                    <div className="admin__container__view">
-                        <SearchBookings/>
-                    </div>
-                </SwipeableViews>
+                <TabPanel value={tab} index={0}>
+                    <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
+                      <Tab label="Approve Users" />
+                      <Tab label="View User" />
+                    </Tabs>
+                    <TabPanel value={subtab} index={0}>
+                        <UserApprovalForm/>
+                    </TabPanel>
+                    <TabPanel value={subtab} index={1}>
+                        <SearchUsers/>
+                    </TabPanel>
+                </TabPanel>
+                <TabPanel value={tab} index={1}>
+                    <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
+                      <Tab label="Upload Ticket" />
+                      <Tab label="Search Ticket" />
+                      <Tab label="Updating PNR" />
+                    </Tabs>
+                    <TabPanel value={subtab} index={0}>
+                        <TicketUploadForm/>
+                    </TabPanel>
+                    <TabPanel value={subtab} index={1}>
+                        <SearchTickets/>
+                    </TabPanel>
+                    <TabPanel value={subtab} index={2}>
+                        <PNRUpdateForm/>
+                    </TabPanel>
+                </TabPanel>
+                <TabPanel value={tab} index={2}>
+                    <SearchBookings/>
+                </TabPanel>
             </div>
         </div>
     )

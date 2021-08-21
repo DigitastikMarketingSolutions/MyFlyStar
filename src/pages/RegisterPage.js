@@ -36,6 +36,7 @@ function RegisterPage() {
         setProvince(e.target.value);
     };
     const handlePhoneChange = (e) => {
+        const num = e.target.value.replace('/\w/')
         setPhone(e.target.value);
     };
     const handleEmailChange = (e) => {

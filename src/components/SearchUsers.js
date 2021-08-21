@@ -1,12 +1,11 @@
 import axios from "../axios";
 import React, { useEffect, useState } from "react";
 import "./SearchUsers.css";
-import { Button, Modal } from "@material-ui/core";
+import { Button, Modal, TextField, Typography } from "@material-ui/core";
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@material-ui/data-grid"
 
 function SearchUsers() {
-  const [users, setUsers] = useState([]);
-  const [open, setOpen] = useState(false)
-  const [user, setUser] = useState({})
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     axios({
@@ -15,46 +14,128 @@ function SearchUsers() {
       headers: {"Access-Control-Allow-Origin": "*"}
     })
       .then((res) => {
-        setUsers(res.data);
+        setRows(res.data.map(user => {
+          return {id: user._id, name: user.name, company: user.company, state: user.state, phone:user.phone, email:user.email, balance: user.balance}
+        }))
+        console.log("Hi")
       })
       .catch((err) => console.error(err));
-  }, [setUsers]);
+      console.log("Row Updated")
+  }, [setRows]);
+  // 18004191172
+  // info@mediassist.in
+
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 250
+    },
+    {
+      field: 'company',
+      headerName: 'Agency',
+      width: 250
+    },
+    {
+      field: 'state',
+      headerName: 'State',
+      width: 120
+    },
+    {
+      field: 'phone',
+      headerName: 'Phone',
+      type: 'string',
+      valueFormatter: ({ value }) => `${value.slice(0,3)} ${value.slice(3,6)} ${value.slice(6)}`,
+      width: 150,
+      sortable: false
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+      sortable: false
+    },
+    {
+      field: 'balance',
+      headerName: 'Balance',
+      type: 'number',
+      width: 150,
+      headerAlign: 'left',
+      align: 'left'
+    },
+    {
+      field: 'addBalance',
+      headerName: 'Add Balance',
+      renderCell: params => (
+        <BalanceAddElement balance={params.row.balance} uid={params.row.id} phone={params.row.phone} users={rows} handleUsersUpdate={(newRows) => {
+          // console.log(newRows)
+          setRows(newRows)
+          console.log("Row Set!")
+        }}/>
+      ),
+      width: 300,
+      headerAlign: 'center',
+      sortable: false,
+      filterable: false,
+      disableExport: true
+    }
+  ]
 
   return (
     <div className="searchUsers">
-      <h2 className="searchUsers__title">All Users</h2>
-      {users.length
-        ? users.map((user) => {
-            return (
-              <div key={user._id} className="searchUsers__user">
-                <span>
-                  {user.name} - {user.company}
-                </span>
-                <Button variant="outlined" color="default" onClick={() => {
-                    setUser(user)
-                    setOpen(true);
-                }}>
-                  View
-                </Button>
-              </div>
-            );
-          })
-        : "No users yet"}
-      <Modal open={open} onClose={() => {
-          setOpen(false);
-          setUser({});
-        }}>
-        <div className="searchUsers__modal">
-            <h1>{user.name}</h1>
-            <h2>{user.company}</h2>
-            <span>{user['state']}</span>
-            <span>{user.phone}</span>
-            <span>{user.email}</span>
-            <span>Balance: Rs. {user.balance}</span>
-        </div>
-      </Modal>
+      <div style={{ height: 650, width: '90%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          rowHeight={80}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          components={{
+            Toolbar: () =>(
+            <GridToolbarContainer>
+              <GridToolbarExport />
+            </GridToolbarContainer>
+            )
+          }}
+        />
+      </div>
     </div>
   );
 }
 
 export default SearchUsers;
+
+
+function BalanceAddElement(props) {
+  const [amount, setAmount] = useState("")
+  const handleBalanceAdd = () => {
+      axios({
+        method: 'patch',
+        url: `api/users?phone=${props.phone}&type=balanceAdd&amount=${amount}`,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      }).then(res => {
+          let newRows = [...props.users]
+          newRows.forEach(item => {
+            if(item.id===props.uid){
+              item.balance = res.data.balance
+            }
+          })
+          props.handleUsersUpdate(newRows)
+          setAmount("")
+      })
+  }
+  return (
+      <div style={{width:"100%", display: "flex", alignItems: "center", justifyContent: "space-evenly"}}>
+          <TextField
+            variant="filled"
+            type="text"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            style={{maxWidth: '150px'}}
+          />
+          <Button variant="contained" onClick={handleBalanceAdd} color="primary">
+            Add
+          </Button>  
+      </div>
+  )
+}
