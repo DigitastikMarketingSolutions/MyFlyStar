@@ -13,7 +13,6 @@ function SearchItem(props) {
   const { flightNo, airline, from, to, stops, departure, arrival, passengers, price, noOfTickets, hotDeal } = props;
   const depDate = new Date(departure);
   const arrDate = new Date(arrival);
-  console.log(depDate.toDateString(), arrDate)
 
   return (
     <Card className="searchItem" elevation={12}>
@@ -46,7 +45,6 @@ function SearchItem(props) {
                 ...props
               },
             });
-            console.log(state.ticket);
             sessionStorage.setItem('ticket', JSON.stringify(props))
             history.push('/booking');
           }

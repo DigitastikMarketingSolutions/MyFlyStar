@@ -18,7 +18,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import "date-fns";
 import SearchItem from "../components/SearchItem";
 import axios from "../axios";
-import { useStateValue } from "../data/StateProvider";
 
 function HomePage() {
   const [sector, setSector] = useState("None");
@@ -28,11 +27,6 @@ function HomePage() {
   const [infants, setInfants] = useState(0);
   const [searches, setSearches] = useState([]);
   const[error, setError] = useState("");
-  const [state, dispatch] = useStateValue()
-
-  console.log(fireSvg)
-
-  console.log(state.user)
 
   const handleSectorChange = (e) => {
     setSector(e.target.value);

@@ -16,7 +16,6 @@ import BookingFormListItem from "../components/BookingFormListItem";
 
 function BookingPage() {
   const ticket = JSON.parse(sessionStorage.getItem("ticket"));
-  console.log(ticket.departure)
   const history = useHistory();
   const [state, dispatch] = useStateValue();
   const [adults, child, infants] = ticket.passengers;

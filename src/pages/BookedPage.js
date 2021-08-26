@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import { auth } from "../Firebase";
 
 function BookedPage(props) {
-  const [state, dispatch] = useStateValue()
+  const [state] = useStateValue()
   const history = useHistory()
   const {
     airline,
@@ -23,7 +23,6 @@ function BookedPage(props) {
     bookingId,
     bookingDate
   } = JSON.parse(sessionStorage.getItem('ticket'));
-  console.log(JSON.parse(sessionStorage.getItem('ticket')))
   const dep = (new Date(departure))
   const arr = (new Date(arrival))
   const [user, setUser] = useState({});

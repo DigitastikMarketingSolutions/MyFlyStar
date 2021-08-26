@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import { auth } from "../Firebase";
-import axios from "../axios";
 
 import "./LoginPage.css";
 import bgImage from "../images/Background1.png";
 import {
     Paper,
-    InputLabel,
     Button,
     TextField,
     Typography,
     Modal,
 } from "@material-ui/core";
-import { useStateValue } from "../data/StateProvider";
 import { Link } from "react-router-dom";
 
 function LoginPage() {
-    const [state, dispatch] = useStateValue();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [approved, setApproved] = useState(true);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -29,26 +24,8 @@ function LoginPage() {
     };
     const handleSubmit = (e) => {
         auth.signInWithEmailAndPassword(email, password)
-            .then((authUser) => {
-                // if(email!=="admin@123.com"){
-                // axios({
-                //   method: "get",
-                //   url: `/api/users/${email}`
-                // })
-                // .then(res => {
-                // console.log(authUser)
-                // dispatch({
-                //   type: "SET_USER",
-                //   user: {...authUser, displayName: res.data.name.split(' ')[0], balance: res.data.balance}
-                // })
-                // })
-                // } else {
-                // console.log(authUser)
-                // dispatch({
-                //   type: "SET_USER",
-                //   user: {...authUser, displayName: "Admin"}
-                // })
-                // }
+            .then(_ => {
+                // Blank
             })
             .catch((err) => {
                 console.error(err);
@@ -131,7 +108,6 @@ const EmailReset = () => {
 
     const handleResetPassword = () => {
       auth.sendPasswordResetEmail(email).then(_ => {
-        console.log("Password reset email sent.")
         setOpen(false)
         setEmail("")
         alert("Password reset email sent.")

@@ -17,7 +17,7 @@
     border: solid white 1px;
 }
 
-.footer h4{
+.footer h4,a{
     font-family: 'Open Sans', sans-serif;
     color: white;
     text-decoration: none;

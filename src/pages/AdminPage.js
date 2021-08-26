@@ -3,11 +3,10 @@ import './AdminPage.css';
 import {Tab, Tabs} from '@material-ui/core';
 import UserApprovalForm from '../components/UserApprovalForm';
 import TicketUploadForm from '../components/TicketUploadForm';
-import PNRUpdateForm from '../components/PNRUpdateForm';
 import SearchUsers from '../components/SearchUsers';
-import SearchTickets from '../components/SearchTickets';
 import SearchBookings from '../components/SearchBookings';
 import TabPanel from '../components/TabPanel';
+import SearchTickets from '../components/SearchTickets';
 
 function AdminPage() {
     const [tab, setTab] = useState(0)
@@ -44,9 +43,6 @@ function AdminPage() {
                     </TabPanel>
                     <TabPanel value={subtab} index={1}>
                         <SearchTickets/>
-                    </TabPanel>
-                    <TabPanel value={subtab} index={2}>
-                        <PNRUpdateForm/>
                     </TabPanel>
                 </TabPanel>
                 <TabPanel value={tab} index={2}>

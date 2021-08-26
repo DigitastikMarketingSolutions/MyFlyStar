@@ -4,9 +4,10 @@ import { Select, MenuItem, TextField, FormControl, InputLabel } from "@material-
 
 function BookingFormListItem(props) {
   const [name, setName] = useState(["Mr.", "", "", ""]);
+  const {handleCallback} = props
 
   useEffect(() => {
-    props.handleCallback(
+    handleCallback(
       name[2].trim()
         ? name.join(" ")
         : name.slice(0, 2).concat(name[3]).join(" ")

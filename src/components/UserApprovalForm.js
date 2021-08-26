@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./UserApprovalForm.css";
-import {
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Button,
-} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import axios from "../axios";
 import { DataGrid } from "@material-ui/data-grid";
 
@@ -31,7 +25,6 @@ function UserApprovalForm() {
                     };
                 })
             );
-            console.log("Hi");
         });
     }, [setRows]);
 

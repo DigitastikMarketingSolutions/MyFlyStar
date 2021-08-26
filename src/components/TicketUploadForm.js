@@ -54,13 +54,7 @@ function TicketUploadForm() {
         setTicket(curr => ({...curr, to: e.target.value}))
       }
       const handleDepDateChange = (date) => {
-        try{
-          console.log(date)
-          setTicket(curr => ({...curr, departure: {...curr.departure, date: new Date(date.toISOString().slice(0,10))}}))
-        } catch(err){
-          console.log(err)
-        }
-        
+        setTicket(curr => ({...curr, departure: {...curr.departure, date: new Date(date.toISOString().slice(0,10))}}))
       }
       const handleDepTimeChange = (e) => {
         setTicket(curr => ({...curr, departure: {...curr.departure, time: e.target.value}}))
@@ -101,7 +95,6 @@ function TicketUploadForm() {
             data: {...ticket, departure, arrival, noOfTickets: ticketQty},
             headers: { "Access-Control-Allow-Origin": "*" },
           }).then(res => {
-            console.log(res.data)
             alert("Ticket Uploaded")
             setOpen(false)
           }).catch(err => console.error(err))

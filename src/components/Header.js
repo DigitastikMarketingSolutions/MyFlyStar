@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {Settings, AddCircleRounded} from "@material-ui/icons";
 import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
@@ -9,14 +9,9 @@ import { auth } from "../Firebase";
 import { useStateValue } from "../data/StateProvider";
 
 function Header() {
-  const [state, dispatch] = useStateValue();
+  const [state] = useStateValue();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [balance, setBalance] = useState(state.user?.balance)
   const history = useHistory()
-
-  useEffect(() => {
-    setBalance(state.user?.balance)
-  }, [state.user?.balance])
 
   const handleSettingsClick = (event) => {
     setAnchorEl(event.currentTarget);

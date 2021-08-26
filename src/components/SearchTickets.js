@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./SearchTickets.css";
 import axios from "../axios";
-import { Button, Checkbox, FormControlLabel, Modal, TextField } from "@material-ui/core";
+import {
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Modal,
+    TextField,
+} from "@material-ui/core";
 import { useStateValue } from "../data/StateProvider";
+import { DataGrid } from "@material-ui/data-grid";
 
 function SearchTickets() {
     const [state] = useStateValue();
-    const [tickets, setTickets] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [ticket, setTicket] = useState({});
-    const [hotDeal, setHotDeal] = useState(!!ticket.hotDeal)
+    const [rows, setRows] = useState([]);
 
     useEffect(() => {
         axios({
@@ -18,199 +22,181 @@ function SearchTickets() {
             headers: { "Access-Control-Allow-Origin": "*" },
         })
             .then((res) => {
-                setTickets(res.data);
+                setRows(
+                    res.data.map((item) => {
+                        return {
+                            id: item._id,
+                            airline: item.airline,
+                            flightNo: item.flightNo,
+                            pnr: item.pnr,
+                            from: item.from,
+                            to: item.to,
+                            bookings: item.bookings,
+                            departure: item.departure,
+                            arrival: item.arrival,
+                            stops: item.stops,
+                            price: item.price,
+                            hotDeal: item.hotDeal,
+                            noOfTickets: item.noOfTickets,
+                        };
+                    })
+                );
             })
             .catch((err) => console.error(err));
-    }, [setTickets, ticket.hotDeal]);
+    }, [setRows]);
+
+    const columns = [
+        {
+            field: "airline",
+            headerName: "Airline",
+            width: 150,
+            valueFormatter: ({ value }) => state.flights[value][0],
+        },
+        {
+            field: "flightNo",
+            headerName: "Flight No.",
+            width: 140,
+        },
+        {
+            field: "pnr",
+            headerName: "PNR",
+            width: 110,
+            editable: true,
+        },
+        {
+            field: "from",
+            headerName: "From",
+            width: 120,
+        },
+        {
+            field: "to",
+            headerName: "To",
+            width: 110,
+        },
+        {
+            field: "departure",
+            headerName: "Departure",
+            width: 150,
+            valueFormatter: ({ value }) =>
+                new Date(value).toLocaleDateString("en-GB") +
+                "  \t  " +
+                new Date(value)
+                    .toLocaleTimeString("en-US", { hour12: false })
+                    .slice(0, 5),
+        },
+        {
+            field: "arrival",
+            headerName: "Arrival",
+            width: 150,
+            valueFormatter: ({ value }) =>
+                new Date(value).toLocaleDateString("en-GB") +
+                "  \t  " +
+                new Date(value)
+                    .toLocaleTimeString("en-US", { hour12: false })
+                    .slice(0, 5),
+        },
+        {
+            field: "stops",
+            headerName: "No. of Stops",
+            width: 170,
+            valueFormatter: ({ value }) =>
+                value === 0
+                    ? "Non-Stop"
+                    : value === 1
+                    ? "One-Stop"
+                    : "Two-Stop",
+        },
+        {
+            field: "price",
+            headerName: "Price",
+            width: 120,
+            valueFormatter: ({ value }) => `₹ ${value}`,
+            editable: true,
+        },
+        {
+            field: "hotDeal",
+            headerName: "Hot Deals",
+            width: 145,
+            renderCell: (params) => (
+                <div>
+                    <Checkbox
+                        checked={params.row.hotDeal}
+                        onChange={(e) => {
+                            axios({
+                                method: "patch",
+                                url: `api/tickets?type=updateHotDeal&id=${params.row.id}&hotDeal=${e.target.checked}`,
+                                headers: { "Access-Control-Allow-Origin": "*" },
+                            }).then((res) => {
+                                setRows((curr) => {
+                                    let newRows = [...curr];
+                                    newRows.forEach((item) => {
+                                        if (item.id === params.row.id) {
+                                            item.hotDeal = !item.hotDeal;
+                                        }
+                                    });
+                                    return newRows;
+                                });
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
+        {
+            field: "noOfTickets",
+            headerName: "Available Tickets",
+            width: 190,
+            valueFormatter: ({ value }) => (value.toString()),
+        },
+        {
+            field: "action",
+            headerName: "Action",
+            headerAlign: "center",
+            width: 500,
+            renderCell: (params) => (
+                <TicketOperations
+                    id={params.row.id}
+                    rows={rows}
+                    handleRowUpdate={(newRows) => setRows(newRows)}
+                />
+            ),
+        },
+    ];
 
     return (
         <div className="searchTickets">
             <h2 className="searchTickets__title">All Tickets</h2>
-            {console.log(tickets)}
-            {tickets.length
-                ? tickets
-                      .sort((a, b) => a?.departure - b?.departure)
-                      .map((item) => {
-                          return (
-                              <div
-                                  key={item?._id}
-                                  className="searchTickets__ticket"
-                              >
-                                  <span>
-                                      <b>Airlines</b>
-                                      <br />
-                                      {item.airline
-                                          ? state.flights[item.airline][0]
-                                          : null}
-                                  </span>
-                                  <span>
-                                      <b>Flight No.</b>
-                                      <br />
-                                      {item?.flightNo}
-                                  </span>
-                                  <span>
-                                      <b>PNR</b>
-                                      <br />
-                                      {item?.pnr}
-                                  </span>
-                                  <span>
-                                      <b>Date</b>
-                                      <br />
-                                      {new Date(
-                                          item?.departure
-                                      ).toLocaleDateString("en-GB")}
-                                  </span>
-                                  <span>
-                                      <b>Sector</b>
-                                      <br />
-                                      {item?.from + " / " + item?.to}
-                                  </span>
-                                  <Button
-                                      variant="outlined"
-                                      color="default"
-                                      onClick={() => {
-                                          setTicket(item);
-                                          setOpen(true);
-                                      }}
-                                  >
-                                      View
-                                  </Button>
-                                  <Modal
-                                      open={open}
-                                      onClose={() => {
-                                          setOpen(false);
-                                          setTicket({});
-                                      }}
-                                  >
-                                      <div className="searchTickets__modal">
-                                          <div className="searchTickets__modal__header">
-                                              <img
-                                                  src={
-                                                      ticket.airline
-                                                          ? state.flights[
-                                                                ticket.airline
-                                                            ][1]
-                                                          : null
-                                                  }
-                                                  alt=""
-                                              />
-                                              <h1>
-                                                  {ticket.airline
-                                                      ? state.flights[
-                                                            ticket?.airline
-                                                        ][0]
-                                                      : null}
-                                              </h1>
-                                              <FormControlLabel
-                                                  control={
-                                                      <Checkbox
-                                                          checked={
-                                                              hotDeal
-                                                          }
-                                                          onChange={(e) => {
-                                                              setHotDeal(curr => !curr)
-                                                              axios({
-                                                                  method: 'patch',
-                                                                  url: `api/tickets?type=updateHotDeal&id=${ticket._id}&hotDeal=${e.target.checked}`,
-                                                                  headers: { "Access-Control-Allow-Origin": "*" },
-                                                                  
-                                                              }).then(res => {
-                                                                  setTicket(res.data)
-                                                              })
-                                                          }}
-                                                          color="primary"
-                                                      />
-                                                  }
-                                                  label="Hot Deal(?)"
-                                              />
-                                          </div>
-                                          <div className="searchTickets__modal__body">
-                                              <div className="searchTickets__modal__body__left">
-                                                  <span>
-                                                      Flight No.:{" "}
-                                                      {ticket?.flightNo}
-                                                  </span>
-                                                  <span>
-                                                      PNR: {ticket?.pnr}
-                                                  </span>
-                                                  <span>
-                                                      No. of Stops:{" "}
-                                                      {ticket?.stops === 0
-                                                          ? "Non-Stop"
-                                                          : ticket.stops === 1
-                                                          ? "One-Stop"
-                                                          : "Two-Stop"}
-                                                  </span>
-                                                  <span>
-                                                      Available Tickets:{" "}
-                                                      {ticket?.noOfTickets}
-                                                  </span>
-                                              </div>
-                                              <div className="searchTickets__modal__body__right">
-                                                  <span>
-                                                      Sector:{" "}
-                                                      {ticket?.from +
-                                                          " / " +
-                                                          ticket.to}
-                                                  </span>
-                                                  <span>
-                                                      Departure:{" "}
-                                                      {new Date(
-                                                          ticket?.departure
-                                                      ).toLocaleDateString(
-                                                          "en-GB"
-                                                      )}
-                                                      &nbsp;&nbsp;&nbsp;&nbsp;
-                                                      <u>
-                                                          {new Date(
-                                                              ticket?.departure
-                                                          )
-                                                              .toLocaleTimeString(
-                                                                  "en-US",
-                                                                  {
-                                                                      hour12: false,
-                                                                  }
-                                                              )
-                                                              .slice(0, 5)}
-                                                      </u>
-                                                  </span>
-                                                  <span>
-                                                      Arrival:{" "}
-                                                      {new Date(
-                                                          ticket?.arrival
-                                                      ).toLocaleDateString(
-                                                          "en-GB"
-                                                      )}
-                                                      &nbsp;&nbsp;&nbsp;&nbsp;
-                                                      <u>
-                                                          {new Date(
-                                                              ticket?.arrival
-                                                          )
-                                                              .toLocaleTimeString(
-                                                                  "en-US",
-                                                                  {
-                                                                      hour12: false,
-                                                                  }
-                                                              )
-                                                              .slice(0, 5)}
-                                                      </u>
-                                                  </span>
-                                                  <span>
-                                                      Price: Rs. {ticket?.price}
-                                                  </span>
-                                              </div>
-                                          </div>
-                                          <TicketOperations
-                                              ticket={ticket}
-                                              handleModal={setOpen}
-                                              handleCallback={setTicket}
-                                          />
-                                      </div>
-                                  </Modal>
-                              </div>
-                          );
-                      })
-                : "No tickets yet"}
+            <div style={{ height: 650, width: "100%" }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    rowHeight={80}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    onCellEditCommit={(params) => {
+                        axios({
+                            method: 'patch',
+                            url: `api/tickets?type=updatePNR&id=${params.row.id}&pnr=${params.value}`,
+                            headers: {"Allow-Control-Access-Origin": "*"}
+                        }).then(res => {
+                            axios({
+                                method: 'patch',
+                                url: `api/bookings?id=${params.row.id}&pnr=${params.value}`,
+                                headers: { "Access-Control-Allow-Origin": "*" },
+                            }).then(_ => {
+                                alert(`PNR updated to ${params.value}`)
+                            })
+                        })
+                    }}
+                    // components={{
+                    //   Toolbar: () =>(
+                    //   <GridToolbarContainer>
+                    //     <GridToolbarExport />
+                    //   </GridToolbarContainer>
+                    //   )
+                    // }}
+                />
+            </div>
         </div>
     );
 }
@@ -221,16 +207,23 @@ const TicketOperations = (props) => {
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [newPrice, setNewPrice] = useState("");
+    const row = props.rows.filter((item) => item.id === props.id);
 
     const handlePriceUpdate = () => {
         axios({
             method: "patch",
-            url: `api/tickets?type=updatePrice&id=${props.ticket._id}&price=${newPrice}`,
+            url: `api/tickets?type=updatePrice&id=${props.id}&price=${newPrice}`,
             headers: { "Access-Control-Allow-Origin": "*" },
         })
             .then((res) => {
-                props.handleCallback(res.data);
-                setNewPrice("");
+                let newRows = [...props.rows];
+                newRows.forEach((item) => {
+                    if (item.id === props.id) {
+                        item.price = res.data.price;
+                    }
+                });
+                props.handleRowUpdate(newRows);
+                setNewPrice("")
             })
             .catch((err) => console.log(err));
     };
@@ -238,17 +231,19 @@ const TicketOperations = (props) => {
     const handleTicketDelete = () => {
         axios({
             method: "delete",
-            url: `api/bookings?tid=${props.ticket._id}`,
+            url: `api/bookings?tid=${props.id}`,
             headers: { "Access-Control-Allow-Origin": "*" },
         })
             .then((_) => {
                 axios({
                     method: "delete",
-                    url: `api/tickets?id=${props.ticket._id}`,
+                    url: `api/tickets?id=${props.id}`,
                     headers: { "Access-Control-Allow-Origin": "*" },
                 }).then((__) => {
                     setOpen(false);
-                    props.handleModal(false);
+                    props.handleRowUpdate(
+                        props.rows.filter((item) => item.id !== props.id)
+                    );
                 });
             })
             .catch((err) => console.error(err));
@@ -257,101 +252,104 @@ const TicketOperations = (props) => {
     const handleTicketBlock = () => {
         axios({
             method: "patch",
-            url: `api/tickets?id=${props.ticket._id}&type=block`,
-            headers: { "Access-Control-Allow-Origin": "*" }
+            url: `api/tickets?id=${props.id}&type=block`,
+            headers: { "Access-Control-Allow-Origin": "*" },
         })
-            .then(res => {
-                props.handleCallback(res.data)
+            .then((res) => {
+                let newRows = [...props.rows];
+                newRows.forEach((item) => {
+                    if (item.id === props.id) {
+                        item.noOfTickets = 0;
+                    }
+                });
+                props.handleRowUpdate(newRows);
                 setOpen2(false);
             })
             .catch((err) => console.error(err));
     };
     return (
-        <div className="ticketops">
-            <div className="ticketops__container">
-                <TextField
-                    className="ticketops__container__item"
-                    size="small"
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
-                    variant="filled"
-                    label="Update Price"
-                />
-                <Button
-                    className="ticketops__container__item"
-                    variant="contained"
-                    color="primary"
-                    onClick={handlePriceUpdate}
-                >
-                    UPDATE
-                </Button>
+        <div style={{width: '100%', display: "flex", alignItems: "center", justifyContent: "space-evenly"}}>
+            <TextField
+                className="ticketops__container__item"
+                value={newPrice}
+                onChange={(e) => setNewPrice(e.target.value)}
+                variant="outlined"
+                style={{maxWidth: '150px'}}
+            />
+            <Button
+                className="ticketops__container__item"
+                variant="contained"
+                color="primary"
+                onClick={handlePriceUpdate}
+            >
+                UPDATE
+            </Button>
 
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setOpen2(true)}
-                >
-                    BLOCK
-                </Button>
-                <Modal open={open2} onClose={() => setOpen(false)}>
-                    <div className="searchTickets__modal">
-                        <p>
-                            Are you sure you want to block this ticket?&nbsp;
-                            {`This PNR still has ${props.ticket?.noOfTickets} tickets.`}
-                        </p>
-                        <div className="searchTickets__modal__buttons">
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => setOpen2(false)}
-                            >
-                                No, Go Back
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleTicketBlock}
-                            >
-                                Yes, Block
-                            </Button>
-                        </div>
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpen2(true)}
+            >
+                BLOCK
+            </Button>
+            <Modal open={open2} onClose={() => setOpen(false)}>
+                <div className="searchTickets__modal">
+                    <p>
+                        Are you sure you want to block this ticket?&nbsp;
+                        {`This PNR still has ${row.noOfTickets} tickets.`}
+                    </p>
+                    <div className="searchTickets__modal__buttons">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setOpen2(false)}
+                        >
+                            No, Go Back
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleTicketBlock}
+                        >
+                            Yes, Block
+                        </Button>
                     </div>
-                </Modal>
+                </div>
+            </Modal>
 
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setOpen(true)}
-                >
-                    DELETE
-                </Button>
-                <Modal open={open} onClose={() => setOpen(false)}>
-                    <div className="searchTickets__modal">
-                        <p>
-                            Are you sure you want to delete this ticket?{" "}
-                            {props.ticket?.bookings?.length
-                                ? `This ticket already has ${props.ticket?.bookings.length} bookings.`
-                                : ""}
-                        </p>
-                        <div className="searchTickets__modal__buttons">
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => setOpen(false)}
-                            >
-                                No, Go Back
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleTicketDelete}
-                            >
-                                Yes, Delete
-                            </Button>
-                        </div>
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpen(true)}
+            >
+                DELETE
+            </Button>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <div className="searchTickets__modal">
+                    <p>
+                        Are you sure you want to delete this ticket?&nbsp;
+                        {row.bookings?.length
+                            ? `This ticket already has ${row.bookings.length} bookings.`
+                            : ""}
+                    </p>
+                    <div className="searchTickets__modal__buttons">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setOpen(false)}
+                        >
+                            No, Go Back
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleTicketDelete}
+                        >
+                            Yes, Delete
+                        </Button>
                     </div>
-                </Modal>
-            </div>
+                </div>
+            </Modal>
         </div>
     );
 };

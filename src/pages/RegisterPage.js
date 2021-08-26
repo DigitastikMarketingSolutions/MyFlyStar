@@ -32,12 +32,11 @@ function RegisterPage() {
         setAgent(e.target.value);
     };
     const handleProvinceChange = (e) => {
-        console.log(e.target.value);
         setProvince(e.target.value);
     };
     const handlePhoneChange = (e) => {
-        const num = e.target.value.replace('/\w/')
-        setPhone(e.target.value);
+        const num = e.target.value.replace(/[^0-9]+/g, '')
+        setPhone(num);
     };
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -60,8 +59,7 @@ function RegisterPage() {
             },
             headers: { "Access-Control-Allow-Origin": "*" },
         })
-            .then((data) => {
-                console.log(data);
+            .then(_ => {
                 alert(
                     "You will be contacted in 72hrs on behalf of your approval request.\nThank you!"
                 );

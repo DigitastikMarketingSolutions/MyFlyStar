@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
 import Header from "./components/Header";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -32,7 +31,6 @@ function App() {
             url: `/api/users?email=${authUser.email}`,
             headers: {'Access-Control-Allow-Origin': '*'}
           }).then((res) => {
-            console.log(res.data)
             dispatch({
               type: "SET_USER",
               user: {
