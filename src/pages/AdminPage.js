@@ -36,7 +36,6 @@ function AdminPage() {
                     <Tabs variant="fullWidth" value={subtab} onChange={(e,t) => setSubtab(t)} aria-label="simple tabs example">
                       <Tab label="Upload Ticket" />
                       <Tab label="Search Ticket" />
-                      <Tab label="Updating PNR" />
                     </Tabs>
                     <TabPanel value={subtab} index={0}>
                         <TicketUploadForm/>

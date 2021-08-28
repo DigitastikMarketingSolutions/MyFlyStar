@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {Settings, AddCircleRounded} from "@material-ui/icons";
-import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Button, Menu, MenuItem } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import Logo from "../images/Logo.jpeg";
 import logo from "../images/DigiTastik_logo.png"
@@ -41,17 +41,16 @@ function Header() {
           <h1>MyFlyStar</h1>
         </Link>
       </div>
-      <Typography
+      <h5
         hidden={
           !auth.currentUser || auth.currentUser?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43"
         }
-        variant="h6"
-        component="h6"
+        
       >
         Welcome, {state.user?.displayName}
         <br/>
-        <span>Current Balance: {state.user?.balance}<Link style={{textDecoration: 'none', color: '#2f2f2f'}} to='/payment'><AddCircleRounded fontSize="small"/></Link></span>
-      </Typography>
+        <span>Current Balance: {state.user?.balance}<Link style={{textDecoration: 'none', color: '#2f2f2f'}} to='/payment'><AddCircleRounded fontSize="small" style={{color: window.innerWidth < 520 ? "white" : "black"}} /></Link></span>
+      </h5>
       {auth.currentUser?.uid === "kf9ofE8KLwQpehBUj5WGQS2uqB43" ? (
         <div className="header__admin__logout">
           <Button variant="contained" color="secondary" onClick={handleLogout}>
@@ -66,7 +65,7 @@ function Header() {
             aria-haspopup="true"
             onClick={handleSettingsClick}
           >
-            <Settings className="header__settings" fontSize="large" />
+            <Settings className="header__settings" fontSize="large" style={{color: window.innerWidth < 520 ? "white" : "black"}} />
           </div>
           <Menu
             id="settings"

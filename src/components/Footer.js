@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './Footer.css'
-import logo from '../images/DigiTastik_logo.png'
+import logo from '../images/DigiTastik_logo.jfif'
 import {auth} from '../Firebase'
 
 

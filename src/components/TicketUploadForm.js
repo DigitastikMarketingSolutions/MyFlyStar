@@ -37,6 +37,7 @@ function TicketUploadForm() {
         noOfTickets: ""
       });
       const [open, setOpen] = useState(false)
+      const [disabled, setDisabled] = useState(false)
 
     const handleFlightNoChange = (e) => {
         setTicket(curr => ({...curr, flightNo: e.target.value}))
@@ -79,6 +80,7 @@ function TicketUploadForm() {
       }
     
       const handleTicketSubmit = () => {
+          setDisabled(true)
           const depDate = ticket.departure.date.getTime()
           const depTime = ticket.departure.time.split(":").map((item) => parseInt(item))
           const departure = depDate + depTime[0]*3600000 + depTime[1]*60000 -5*3600000 -30*60000
@@ -97,6 +99,7 @@ function TicketUploadForm() {
           }).then(res => {
             alert("Ticket Uploaded")
             setOpen(false)
+            setDisabled(false)
           }).catch(err => console.error(err))
       }
 
@@ -349,7 +352,7 @@ function TicketUploadForm() {
                     <Button variant="contained" color="secondary" onClick={() => setOpen(false)} >
                         No, Go Back
                     </Button>
-                    <Button variant="contained" color="primary" onClick={handleTicketSubmit} >
+                    <Button disabled={disabled} variant="contained" color="primary" onClick={handleTicketSubmit} >
                         Yes, Upload
                     </Button>
                     </div>

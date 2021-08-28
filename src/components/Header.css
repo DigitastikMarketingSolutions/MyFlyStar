@@ -6,7 +6,7 @@
 
     position: relative;
     z-index: 5;
-    width: 100%;
+    width: 100vw;
     overflow-y: hidden;
     background: rgba(0, 0, 0, 0.1);
 }
@@ -15,10 +15,6 @@
     display: flex;
     align-items: center;
     flex: 0.7;
-}
-
-.header__logo h1{
-    font-family: 'Open Sans', sans-serif;
 }
 
 .header__logo__image{
@@ -31,7 +27,7 @@
 
 
     border-radius: 50%;
-    box-shadow: 0px 0px 10px 2px #fdc8c8;
+    box-shadow: 0px 0px 2px 1px #fdc8c8;
 }
 
 .header__settings{
@@ -72,4 +68,24 @@
     font-family: 'Bellota', cursive;
     font-size: 3rem;
     
+}
+
+@media screen and (max-width: 520px) {
+    .header{
+        background: rgba(0, 0, 0, 0.7);
+    }
+    .header__links h1{
+        display: none;
+    }
+    .header__settings{
+        flex: 0.1;
+        margin: 2rem 1rem;
+    }
+    h5{
+        color: white;
+    }
+    .header__logo__image{
+        flex: 0.1;
+        margin-left: 1rem;
+    }
 }

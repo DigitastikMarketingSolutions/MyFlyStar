@@ -124,21 +124,29 @@ export default SearchUsers;
 
 function BalanceAddElement(props) {
     const [amount, setAmount] = useState("");
+    const [disabled, setDisabled] = useState(false)
     const handleBalanceAdd = () => {
-        axios({
-            method: "patch",
-            url: `api/users?phone=${props.phone}&type=balanceAdd&amount=${amount}`,
-            headers: { "Access-Control-Allow-Origin": "*" },
-        }).then((res) => {
-            let newRows = [...props.users];
-            newRows.forEach((item) => {
-                if (item.id === props.uid) {
-                    item.balance = res.data.balance;
-                }
+        setDisabled(true)
+        if(amount){
+            axios({
+                method: "patch",
+                url: `api/users?phone=${props.phone}&type=balanceAdd&amount=${amount}`,
+                headers: { "Access-Control-Allow-Origin": "*" },
+            }).then((res) => {
+                let newRows = [...props.users];
+                newRows.forEach((item) => {
+                    if (item.id === props.uid) {
+                        item.balance = res.data.balance;
+                    }
+                });
+                props.handleUsersUpdate(newRows);
+                setAmount("");
+                setDisabled(false)
             });
-            props.handleUsersUpdate(newRows);
-            setAmount("");
-        });
+        } else {
+            alert("Please enter an amount first!")
+        }
+        
     };
     return (
         <div
@@ -153,13 +161,14 @@ function BalanceAddElement(props) {
                 variant="filled"
                 type="text"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => setAmount(e.target.value.replace(/[^0-9]+/g, ''))}
                 style={{ maxWidth: "150px" }}
             />
             <Button
                 variant="contained"
                 onClick={handleBalanceAdd}
                 color="primary"
+                disabled={disabled}
             >
                 Add
             </Button>

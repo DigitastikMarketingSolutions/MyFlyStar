@@ -207,28 +207,40 @@ const TicketOperations = (props) => {
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [newPrice, setNewPrice] = useState("");
+    const [disableUpdate, setDisableUpdate] = useState(false)
+    const [disableDelete, setDisableDelete] = useState(false)
+    const [disableBlock, setDisableBlock] = useState(false)
+
     const row = props.rows.filter((item) => item.id === props.id);
 
     const handlePriceUpdate = () => {
-        axios({
-            method: "patch",
-            url: `api/tickets?type=updatePrice&id=${props.id}&price=${newPrice}`,
-            headers: { "Access-Control-Allow-Origin": "*" },
-        })
-            .then((res) => {
-                let newRows = [...props.rows];
-                newRows.forEach((item) => {
-                    if (item.id === props.id) {
-                        item.price = res.data.price;
-                    }
-                });
-                props.handleRowUpdate(newRows);
-                setNewPrice("")
+        if(newPrice){
+            setDisableUpdate(true)
+            axios({
+                method: "patch",
+                url: `api/tickets?type=updatePrice&id=${props.id}&price=${newPrice}`,
+                headers: { "Access-Control-Allow-Origin": "*" },
             })
-            .catch((err) => console.log(err));
+                .then((res) => {
+                    let newRows = [...props.rows];
+                    newRows.forEach((item) => {
+                        if (item.id === props.id) {
+                            item.price = res.data.price;
+                        }
+                    });
+                    props.handleRowUpdate(newRows);
+                    setNewPrice("")
+                    setDisableUpdate(false)
+                })
+                .catch((err) => console.log(err));
+        } else {
+            alert("Please enter an amount first.")
+        }
+        
     };
 
     const handleTicketDelete = () => {
+        setDisableDelete(true)
         axios({
             method: "delete",
             url: `api/bookings?tid=${props.id}`,
@@ -244,12 +256,14 @@ const TicketOperations = (props) => {
                     props.handleRowUpdate(
                         props.rows.filter((item) => item.id !== props.id)
                     );
+                    setDisableDelete(false)
                 });
             })
             .catch((err) => console.error(err));
     };
 
     const handleTicketBlock = () => {
+        setDisableBlock(true)
         axios({
             method: "patch",
             url: `api/tickets?id=${props.id}&type=block`,
@@ -264,6 +278,7 @@ const TicketOperations = (props) => {
                 });
                 props.handleRowUpdate(newRows);
                 setOpen2(false);
+                setDisableBlock(false)
             })
             .catch((err) => console.error(err));
     };
@@ -272,7 +287,7 @@ const TicketOperations = (props) => {
             <TextField
                 className="ticketops__container__item"
                 value={newPrice}
-                onChange={(e) => setNewPrice(e.target.value)}
+                onChange={(e) => setNewPrice(e.target.value.replace(/[^0-9]+/g, ''))}
                 variant="outlined"
                 style={{maxWidth: '150px'}}
             />
@@ -281,6 +296,7 @@ const TicketOperations = (props) => {
                 variant="contained"
                 color="primary"
                 onClick={handlePriceUpdate}
+                disabled={disableUpdate}
             >
                 UPDATE
             </Button>
@@ -310,6 +326,7 @@ const TicketOperations = (props) => {
                             variant="contained"
                             color="secondary"
                             onClick={handleTicketBlock}
+                            disabled={disableBlock}
                         >
                             Yes, Block
                         </Button>
@@ -344,6 +361,7 @@ const TicketOperations = (props) => {
                             variant="contained"
                             color="secondary"
                             onClick={handleTicketDelete}
+                            disabled={disableDelete}
                         >
                             Yes, Delete
                         </Button>
